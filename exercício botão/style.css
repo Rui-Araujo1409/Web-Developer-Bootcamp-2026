@@ -1,0 +1,21 @@
+body {
+    background-color: black;
+}
+
+button {
+    background-color: black;
+    color: #F09657;
+    border: 2px solid #F09657;
+    padding: 1em 2em;
+    margin: auto;
+    display: block;
+    transition: 1s;
+}
+
+button:hover {
+    border-color: #B3B478;
+    box-shadow: 0 0.5em 0.5em -0.4em #B3B478;
+    color: white;
+    transition: 1s;
+    transform: translateY(30px); 
+}
