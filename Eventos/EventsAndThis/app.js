@@ -19,4 +19,5 @@ for (let h1 of h1s) {
 function colorize() {
     this.style.backgroundColor = makeRandColor();
     this.style.color = makeRandColor();
+    this.innerText = "teste";
 }
