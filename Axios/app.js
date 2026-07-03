@@ -11,6 +11,30 @@ const resultado = async (id) => {
     }  
 }
 
-resultado(4);
 
+//com Headers
 
+const botão = document.querySelector("#botão");
+const texto = document.querySelector("#piadas");
+
+const dadJoke = async () => {
+    try {
+        //colocar o header config numa var(obj), podia colocar tudo no 2º parâmetro no axios
+        const config = { headers: { Accept: "application/json"}};
+        const resposta = await axios("https://icanhazdadjoke.com/", config);
+        //console.log(resposta);
+        return resposta.data.joke;
+    } catch (error) {
+        console.log("Erro", error);
+    }
+}
+
+//como o dadJoke retorna uma Promise, temos que usar uma fx Async Await para usar o resultado
+const novaPiada = async () => {
+    const piada = await dadJoke();
+    texto.innerText = piada;
+}
+
+botão.addEventListener("click", () => {
+    novaPiada();
+})
