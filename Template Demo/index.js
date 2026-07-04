@@ -13,9 +13,16 @@ app.get("/", (req, res) => {
     res.render("home.ejs")
 })
 
-app.get("/aleatorio", (req,res) => res.render("aleatorio.ejs"));
+app.get("/aleatorio", (req,res) => {
+    const num = Math.floor(Math.random() * 10) + 1;
+    //para passar algo para o template, uso um 2º parâmetro no .render, que é um obj (pode ser key:value ou apenas uma var)
+    res.render("aleatorio.ejs", { num });
+});
 
-
+app.get("/r/:subreddit", (req, res) => {
+    const { subreddit } = req.params;
+    res.render("subreddit.ejs", { subreddit });
+})
 
 
 
