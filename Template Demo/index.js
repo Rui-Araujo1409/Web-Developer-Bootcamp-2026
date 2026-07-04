@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
     res.render("home.ejs")
 })
 
+app.get("/aleatorio", (req,res) => res.render("aleatorio.ejs"));
 
 
 
