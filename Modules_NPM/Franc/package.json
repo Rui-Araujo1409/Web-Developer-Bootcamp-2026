@@ -1,0 +1,16 @@
+{
+  "name": "franc",
+  "version": "1.0.0",
+  "description": "para o exercício com o franc e langs",
+  "license": "ISC",
+  "author": "Rui Araújo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "franc": "^5.0.0",
+    "langs": "^2.0.0"
+  }
+}
