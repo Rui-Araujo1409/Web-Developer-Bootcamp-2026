@@ -24,6 +24,10 @@ app.get("/r/:subreddit", (req, res) => {
     res.render("subreddit.ejs", { subreddit });
 })
 
+app.get("/gatos", (req,res) => {
+    const gatos = ["nikita", "morticia", "garfield", "tucha"];
+    res.render("gatos", {gatos});
+})
 
 
 
