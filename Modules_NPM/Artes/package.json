@@ -1,0 +1,16 @@
+{
+  "name": "artes",
+  "version": "1.0.0",
+  "description": "para testar o package.json",
+  "license": "ISC",
+  "author": "Rui Araújo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "figlet": "^1.11.0"
+  }
+}
