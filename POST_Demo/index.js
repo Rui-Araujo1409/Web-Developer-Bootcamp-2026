@@ -49,7 +49,7 @@ app.get("/comentarios/novo", (req,res) => {
 app.get("/comentarios/:id/editar", (req, res) => {
     const {id} = req.params;
     const comentário = comentários.find(com => com.id === id);
-    console.log(comentário);
+    //console.log(comentário);
     res.render("comentários/editar", {comentário});
 })
 
