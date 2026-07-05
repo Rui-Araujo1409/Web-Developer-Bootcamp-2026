@@ -38,6 +38,13 @@ app.get("/comentarios/novo", (req,res) => {
     res.render("comentários/novo");
 })
 
+app.post("/comentarios", (req,res) => {
+    const {username, texto} = req.body;
+    comentários.push({username, texto});
+    //o .redirect serve para evitar reenviar o post com os dados no body
+    res.redirect("/comentarios");
+})
+
 
 app.get("/tacos", (req,res) => {
     res.send("GET /tacos resposta");

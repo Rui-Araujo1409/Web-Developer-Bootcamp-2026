@@ -7,8 +7,18 @@
 </head>
 <body>
 <h1>Formulário para o novo comentário</h1>    
-<form action="">
-    <input type="text" name="">
+<form action="/comentarios" method="post">
+    <section>
+    <label for="nome">Insira o seu username: </label>
+    <input type="text" name="username" id="nome">
+    </section>
+    <section>
+    <label for="">Comentário</label>
+    <br>
+    <textarea name="texto" id="comentário" cols="20" rows="5"></textarea>
+    </section>
+    <button>Submeter</button>
 </form>
+<button><a href="/comentarios">Voltar</a></button>
 </body>
 </html>
