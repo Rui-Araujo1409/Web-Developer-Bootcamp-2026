@@ -33,6 +33,12 @@ app.get("/comentarios", (req, res) => {
     res.render("comentários/index", {comentários});
 })
 
+//um GET para servir o formulário, que vai enviar os dados via POST para outra rota
+app.get("/comentarios/novo", (req,res) => {
+    res.render("comentários/novo");
+})
+
+
 app.get("/tacos", (req,res) => {
     res.send("GET /tacos resposta");
 })
