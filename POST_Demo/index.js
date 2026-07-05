@@ -5,7 +5,7 @@ const app = express();
 const methodOverride = require("method-override");
 
 
-const comentários = [
+let comentários = [
     {
         id: uuid(),
         username: "João",
@@ -77,6 +77,13 @@ app.patch("/comentarios/:id", (req,res) => {
     //substituir o texto pelo novo
     comentário.texto = novoComentário;
     //depois redireccionar para a lista
+    res.redirect("/comentarios");
+})
+
+app.delete("/comentarios/:id", (req, res) => {
+    const {id} = req.params;
+    //const comentário = comentários.find(com => com.id === id);
+    comentários = comentários.filter(com => com.id !== id );
     res.redirect("/comentarios");
 })
 
