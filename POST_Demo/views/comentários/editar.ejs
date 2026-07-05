@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar comentário</title>
+</head>
+<body>
+    <h1>Editar comentário</h1>
+    <form action="/comentarios/<%= comentário.id%>/?_method=PATCH" method="post">
+    <textarea name="texto" id="comentário" cols="20" rows="5"><%= comentário.texto %></textarea>
+    <br>
+    <button>Submeter</button>
+    </form>
+</body>
+</html>

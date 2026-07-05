@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const {v4: uuid} = require("uuid");
 const app = express();
+const methodOverride = require("method-override");
 
 
 const comentários = [
@@ -31,6 +32,7 @@ const comentários = [
 app.use(express.urlencoded({extended: true}));
 //para interpretar corpo do pedido (em JSON) com application/json
 app.use(express.json());
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
@@ -42,6 +44,13 @@ app.get("/comentarios", (req, res) => {
 //um GET para servir o formulário, que vai enviar os dados via POST para outra rota
 app.get("/comentarios/novo", (req,res) => {
     res.render("comentários/novo");
+})
+
+app.get("/comentarios/:id/editar", (req, res) => {
+    const {id} = req.params;
+    const comentário = comentários.find(com => com.id === id);
+    console.log(comentário);
+    res.render("comentários/editar", {comentário});
 })
 
 app.post("/comentarios", (req,res) => {
