@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Your main development environment
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - ../:/workspace:cached
+    command: sleep infinity
+    # network_mode: service:db # Uncomment if you want 'localhost' to point to the DB container
+
+  # The MongoDB database
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb-data:

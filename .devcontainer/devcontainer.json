@@ -1,0 +1,21 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/mongosh-homebrew:1": {}
+	},
+	"name": "Node.js & MongoDB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  
+  // Forwards the default MongoDB port to your local machine/browser
+  "forwardPorts": [27017],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mongodb.mongodb-vscode"
+      ]
+    }
+  }
+}
