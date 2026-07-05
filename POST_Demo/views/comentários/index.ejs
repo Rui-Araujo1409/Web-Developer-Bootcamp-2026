@@ -9,8 +9,8 @@
     
 <h1>Lista de comentários:</h1>
 <ul>
-    <%for(comentário of comentários) {%>
-        <li><b><%= comentário.username %></b>: <%= comentário.texto %></li>
+    <%for(let comentário of comentários) {%>
+        <li><b><%= comentário.username %></b>: <%= comentário.texto %> <a href="/comentarios/<%= comentário.id %>">Mostrar mais</a></li>
     <% } %>
 </ul>
 <button><a href="/comentarios/novo">Novo comentário</a></button>
