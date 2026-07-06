@@ -7,7 +7,7 @@ const conectarMongoBD = async () => {
         await mongoose.connect("mongodb+srv://rui1409_db_user:5zUk18Kz4KlyTwp2@cluster0.xkdudas.mongodb.net/BDfilmes?appName=Cluster0");
         console.log("Conectado ao MongoDB");
         return mongoose;
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
@@ -29,10 +29,57 @@ const filmeSchema = new mongoose.Schema({
 const Filme = mongoose.model("Filme", filmeSchema);
 
 //usar o modelo para criar um obj (Taxi Driver)
-const taxiDriver = new Filme({
+/* const taxiDriver = new Filme({
     título: "Taxi Driver",
     ano: 1976,
     pontuação: 8.2,
     restrição: "M/16",
     emStream: true
-});
+}); */
+
+//tentar enviar um conjunto de dados, método .insertMany usado no modelo (com a var Filme), não precisa de usar a classe
+//é async logo usar cllaback, Promise ou Async Await
+
+/* const listaInserir = [
+    {
+        título: "2001: Odisseia no espaço",
+        ano: 1968,
+        pontuação: 8.3,
+        restrição: "M/12",
+        emStream: true
+    },
+    {
+        título: "Shining",
+        ano: 1980,
+        pontuação: 8.4,
+        restrição: "M/16",
+        emStream: true
+    },
+    {
+        título: "Joker",
+        ano: 2019,
+        pontuação: 8.3,
+        restrição: "M/14",
+        emStream: true
+    },
+    {
+        título: "Donnie Darko",
+        ano: 2001,
+        pontuação: 8.0,
+        restrição: "M/16",
+        emStream: false
+    }
+]
+ */
+// a fx com o async await
+/* const inserirFilmesMongoDB = async () => {
+    try {
+        const dados = await Filme.insertMany(listaInserir);
+        console.log("Funcionou");
+        console.log(dados);
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+inserirFilmesMongoDB(); */
