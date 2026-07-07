@@ -26,7 +26,7 @@ const produtoSchema = new mongoose.Schema({
         type: Number, //aqui a validação não é estrita, aceita 599 ou "599", rejeita "asdassda"
         required: true,
         min: [1, "Vender de graça? nope"] //se colocar apenas o 0 a validação é por defeito, para retornar uma mensagem de erro personalizada, usa-se um
-                                         //array [valor,mensagem] como neste caso 
+        //array [valor,mensagem] como neste caso 
     },
     emPromoção: {
         type: Boolean,
@@ -45,9 +45,29 @@ const produtoSchema = new mongoose.Schema({
     },
     tamanho: {
         type: String,
-        enum: ["S","M","L"]
+        enum: ["S", "M", "L"]
     }
 });
+
+
+//Instance Methods => métodos criados por nós, mas em vez dos Model Methods que são usados numa classe
+//(nos exemplos abaixo, algo como Product.findOne(xxxx), o .findOne() é usado na classe)
+//aqui o método que definimos é usado numa instância da classe, ou seja, numa instância da classe Produto
+//seja uma bicicleta, capacete, etc... e é definido em cima do Schema => xxSchema.methods.<nome do método> = function () {}
+//ou mesmo no esquema exemplo: new Schema({nome: String}, {methods: {dizerAlgo() {console.log("Dizer Algo")}}})
+//nota, tem que ser uma declaração de fx tradicional por causa do "this" e tem de estar ANTES da definição do modelo!!
+produtoSchema.methods.apresentarSaldo = function () {
+    console.log(`O produto ${this.nome} com o preço de ${this.preço}€ está com promoção de 20%!`);
+}
+
+//agora um método para a instância mas que faz um pedido ao MongoDB, neste caso um .save()
+//para guardar a alteração ao produto
+produtoSchema.methods.adicionarCategoria = function(novaCategoria) {
+    this.categorias.push(novaCategoria);
+    this.save();
+    console.log("categoria alterada");
+}
+
 
 //criar o modelo
 const Produto = new mongoose.model("Produto", produtoSchema);
@@ -55,12 +75,12 @@ const Produto = new mongoose.model("Produto", produtoSchema);
 //esta versão criar erro de validação: "Path `nome` is required."
 //const bicicleta = new Produto({preço: 599});
 
-const produtoNovo = new Produto({ nome: "Luvas", preço: 20, categorias: ["segurança","ciclismo"], tamanho: "L" });
+//const produtoNovo = new Produto({ nome: "Luvas", preço: 20, categorias: ["segurança", "ciclismo"], tamanho: "L" });
 //se acrescentar mais alguma propriedade (como {..., cor: "verde"}) não dá erro mas ignora a propriedade,
 //apenas cria no MongoDB nome, preço e emPromoção (com valor por defeito de false)
 
 //fx async para criar o documento
-const criarProduto = async () => {
+/* const criarProduto = async () => {
     try {
         await produtoNovo.save();
         console.log("produto criado");
@@ -69,7 +89,7 @@ const criarProduto = async () => {
     }
 };
 
-criarProduto();
+criarProduto(); */
 
 //para usar a validação ao actualizar um documento, temos que especificar que queremos usar a validação (runValidators: true)
 //na parte das opções neste caso do método .findOneAndUpdate()
@@ -83,3 +103,30 @@ criarProduto();
 }
 
 alterarProduto(); */
+
+
+//fx async para pesquisar um produto em específico e depois aplicar o método (.apresentarSaldo()) à instância
+const pesquisarProdutoSaldo = async () => {
+    try {
+        const produtoEncontrado = await Produto.findOne({ nome: "Luvas" });
+        produtoEncontrado.apresentarSaldo();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+pesquisarProdutoSaldo();
+
+//fx async para usar o método à instância (.adicionarCategoria())
+const pesquisarProdutoCategoria = async () => {
+    try {
+        const produtoEncontrado = await Produto.findOne({ nome: "Cadeado" });
+        //como o método faz um pedido ao MongoDB (pelo .save()) e isso demora, tem que ter um await
+       await produtoEncontrado.adicionarCategoria("protecção");
+       console.log(produtoEncontrado);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+pesquisarProdutoCategoria();
