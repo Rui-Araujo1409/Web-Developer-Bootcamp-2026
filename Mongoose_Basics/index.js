@@ -83,3 +83,17 @@ const Filme = mongoose.model("Filme", filmeSchema);
 }
 
 inserirFilmesMongoDB(); */
+
+//para alterar um documento (o primeiro que satisfaz a query do título)
+//await Filme.updateOne({título: "Shining"}, {emStream: false})
+
+//para alterar vários documentos (usar o operador $in do Mongo)
+// await Filme.updateMany({título: {$in:["2001: Odisseia no espaço", "Donnie Darko"]}}, {pontuação: 8.5})
+
+
+//para encontrar e alterar um documento (no video ele não usa o $set), pelos vistos as versões mais recentes do mongoose, o método dele não funciona?
+//a opção {returnDocument: 'after'} serve para retornar o objecto novo (por defeito retorna o antigo)
+//await Filme.findOneAndUpdate({título: "Shining"},{pontuação: 8.5},{returnDocument: 'after'});
+
+//para encontrar um documento e apagar (retorna um objecto com o documento apagado)
+//await Filme.findOneAndDelete({título: "Taxi Driver"})
