@@ -24,7 +24,23 @@ const produtoSchema = new mongoose.Schema({
     },
     preço: {
         type: Number, //aqui a validação não é estrita, aceita 599 ou "599", rejeita "asdassda"
-        required: true
+        required: true,
+        min: 20
+    },
+    emPromoção: {
+        type: Boolean,
+        default: false //aqui definimos um valor por defeito para esta propriedade que vai ser "false"
+    },
+    categorias: [String], //aqui definimos que o valor será um array de strings
+    qtd: { //vamos definir um obj nesta propriedade que vai ter os dados sobre as quantidades disponíveis
+        online: { 
+            type: Number,
+            default: 0
+        },
+        naLoja: {
+            type: Number,
+            default: 0
+        }
     }
 });
 
@@ -34,16 +50,18 @@ const Produto = new mongoose.model("Produto", produtoSchema);
 //esta versão criar erro de validação: "Path `nome` is required."
 //const bicicleta = new Produto({preço: 599});
 
-const bicicleta = new Produto({nome: "BTT", preço: 999});
+const produtoNovo = new Produto({nome: "Capacete", preço: 21, categorias: ["segurança", "ciclismo"]});
 //se acrescentar mais alguma propriedade (como {..., cor: "verde"}) não dá erro mas ignora a propriedade,
-//apenas cria no MongoDB nome e preço 
+//apenas cria no MongoDB nome, preço e emPromoção (com valor por defeito de false)
 
 //fx async para criar o documento
-/* const criarBicicleta = async () => {
+const criarProduto = async () => {
     try {
-        await bicicleta.save();
-        console.log("bicicleta criada");
+        await produtoNovo.save();
+        console.log("produto criado");
     } catch(err) {
         console.log(err);
     } 
-};*/
+};
+
+criarProduto();
