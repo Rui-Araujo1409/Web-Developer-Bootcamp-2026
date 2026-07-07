@@ -38,6 +38,18 @@ const Filme = mongoose.model("Filme", filmeSchema);
     emStream: true
 }); */
 
+//para gravar no MongoDB usar o método async .save()
+//(escrever no node): await taxiDriver.save() ou 
+//const gravarTaxiDriver = async () => { 
+// try {
+// await taxiDriver.save();
+//console.log("filme criado")
+//} catch(err) {
+//console.log(err)
+//}
+//}
+//gravarTaxiDriver();
+
 //tentar enviar um conjunto de dados, método .insertMany usado no modelo (com a var Filme), não precisa de usar a classe
 //é async logo usar cllaback, Promise ou Async Await
 
