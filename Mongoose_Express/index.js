@@ -4,6 +4,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
+const Produto = require("./Modelos/produto");
+
 const conectarMongoBD = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
