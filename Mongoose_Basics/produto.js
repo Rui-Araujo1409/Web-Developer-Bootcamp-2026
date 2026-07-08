@@ -61,11 +61,34 @@ produtoSchema.methods.apresentarSaldo = function () {
 }
 
 //agora um método para a instância mas que faz um pedido ao MongoDB, neste caso um .save()
-//para guardar a alteração ao produto
-produtoSchema.methods.adicionarCategoria = function(novaCategoria) {
+//para guardar a alteração ao produto, estes métodos servem para criar docs, editar docs, apagar em massa
+produtoSchema.methods.adicionarCategoria = function (novaCategoria) {
     this.categorias.push(novaCategoria);
     this.save();
     console.log("categoria alterada");
+}
+
+//Static Methods => métodos que se aplicam a todo um modelo (e não a uma instância de um modelo, como os Instance Models)
+//declaram-se de forma semelhante, aqui o método vai se aplicar a todos os documentos do modelo
+//não precisa de se criar um fx para pesquisar um documento em particular, logo a fx é async
+produtoSchema.statics.colocarPromoção = async function () {
+    try {
+        //usar "this" em vez de especificar o modelo
+        await this.updateMany({}, { emPromoção: true, preço: 0 });
+        console.log("As promoções foram inseridas");
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+//outra fx para retornar os objectos que são "capacete"
+produtoSchema.statics.encontrarCapacete = async function () {
+    try{
+const capacetes = await this.find({nome: "Capacete"});
+console.log(capacetes);
+    } catch(err) {
+        console.log(err)
+    }
 }
 
 
@@ -106,7 +129,7 @@ alterarProduto(); */
 
 
 //fx async para pesquisar um produto em específico e depois aplicar o método (.apresentarSaldo()) à instância
-const pesquisarProdutoSaldo = async () => {
+/* const pesquisarProdutoSaldo = async () => {
     try {
         const produtoEncontrado = await Produto.findOne({ nome: "Luvas" });
         produtoEncontrado.apresentarSaldo();
@@ -115,18 +138,24 @@ const pesquisarProdutoSaldo = async () => {
     }
 }
 
-pesquisarProdutoSaldo();
+pesquisarProdutoSaldo(); */
 
 //fx async para usar o método à instância (.adicionarCategoria())
-const pesquisarProdutoCategoria = async () => {
+/* const pesquisarProdutoCategoria = async () => {
     try {
         const produtoEncontrado = await Produto.findOne({ nome: "Cadeado" });
         //como o método faz um pedido ao MongoDB (pelo .save()) e isso demora, tem que ter um await
-       await produtoEncontrado.adicionarCategoria("protecção");
-       console.log(produtoEncontrado);
+        await produtoEncontrado.adicionarCategoria("protecção");
+        console.log(produtoEncontrado);
     } catch (err) {
         console.log(err);
     }
 }
 
-pesquisarProdutoCategoria();
+pesquisarProdutoCategoria(); */
+
+//chamar a fx método estático
+///Produto.colocarPromoção();
+
+//a 2ª fx método estáttico
+//Produto.encontrarCapacete();
