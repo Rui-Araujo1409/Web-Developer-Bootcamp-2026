@@ -37,6 +37,8 @@ app.get("/produtos/novo", (req,res) => {
     res.render("produtos/novo");
 })
 
+
+
 //o pedido de criar o produto à BD implica async
 app.post("/produtos", async (req, res) => {
     const novoProduto = new Produto(req.body);
@@ -45,12 +47,20 @@ app.post("/produtos", async (req, res) => {
     res.redirect(`/produtos/${novoProduto._id}`);
 })
 
+
+//assim que o path tem :id as rotas seguintes com o mesmo
+//padrão (neste caso /produtos/) têm que usar o :id
 app.get("/produtos/:id", async (req, res) => {
     const {id} = req.params;
     const produto = await Produto.findById(id);
     res.render("produtos/detalhe", {produto});
 })
 
+app.get("/produtos/:id/editar", async (req,res) => {
+    const {id} = req.params;
+    const produto = await Produto.findById(id);
+    res.render("produtos/editar", {produto});
+})
 
 
 
