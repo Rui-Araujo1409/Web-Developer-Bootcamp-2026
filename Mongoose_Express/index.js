@@ -22,9 +22,15 @@ conectarMongoBD();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.get("/teste", (req,res) => {
-    res.send("testado com sucesso");
+//criar a rota para ter a lista de todos os produtos
+//como a consulta ao MongoDB demora, a alternativa é criar uma
+//fx async para receber o pedido, este é o padrão para as consultas à BD
+app.get("/produtos", async (req, res) => {
+    const produtos = await Produto.find({});
+    res.render("produtos/index", {produtos});
 })
+
+
 
 
 
