@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Editar o produto</h1>
-    <form action="/produtos/<%= produto._id%> %>" method="post">
+    <form action="/produtos/<%= produto._id%>%>?_method=PUT" method="post">
         <section>
         <label for="nome">Insira o nome do produto: </label>
         <input type="text" name="nome" id="nome" value="<%= produto.nome %>">
@@ -26,5 +26,7 @@
         </section>
         <button>Submeter</button>
     </form>
+
+    <button><a href="/produtos/<%=produto._id%>">Voltar à página do produto</a></button>
 </body>
 </html>
