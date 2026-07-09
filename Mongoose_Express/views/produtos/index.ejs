@@ -9,8 +9,11 @@
     <h1>Todos os produtos disponíveis</h1>
     <ul>
         <% for(let produto of produtos) {%>
-        <li><%=`${produto.nome}, preço: ${produto.preço}`%></li>
+        <li><a href="/produtos/<%=produto._id%>"><%=`${produto.nome}`%></a></li>
         <%}%>
     </ul>
+
+   <button><a href="/produtos/novo">Inserir um novo produto</a></button>
+    
 </body>
 </html>

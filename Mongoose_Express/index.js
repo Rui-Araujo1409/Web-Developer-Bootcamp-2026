@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+
 const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
@@ -19,6 +20,8 @@ const conectarMongoBD = async () => {
 
 conectarMongoBD();
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -27,10 +30,26 @@ app.set("view engine", "ejs");
 //fx async para receber o pedido, este é o padrão para as consultas à BD
 app.get("/produtos", async (req, res) => {
     const produtos = await Produto.find({});
-    res.render("produtos/index", {produtos});
+    res.render("produtos/index", { produtos });
 })
 
+app.get("/produtos/novo", (req,res) => {
+    res.render("produtos/novo");
+})
 
+//o pedido de criar o produto à BD implica async
+app.post("/produtos", async (req, res) => {
+    const novoProduto = new Produto(req.body);
+    console.log(novoProduto);
+    await novoProduto.save();
+    res.redirect(`/produtos/${novoProduto._id}`);
+})
+
+app.get("/produtos/:id", async (req, res) => {
+    const {id} = req.params;
+    const produto = await Produto.findById(id);
+    res.render("produtos/detalhe", {produto});
+})
 
 
 
