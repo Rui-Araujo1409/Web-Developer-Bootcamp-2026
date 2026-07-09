@@ -19,9 +19,9 @@
         <section>
         <label for="categoria">Insira a categoria</label>
         <select name="categoria" id="categoria">
-            <option value="fruta">Fruta</option>
-            <option value="vegetais">Vegetais</option>
-            <option value="lacticínios">Lacticínios</option>
+            <% for( let categoria of categorias ) { %>
+            <option value="<%=categoria%>"><%=categoria%></option>
+            <% } %>
         </select>
         </section>
         <button>Submeter</button>

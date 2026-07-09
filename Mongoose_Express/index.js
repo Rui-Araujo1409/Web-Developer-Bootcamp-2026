@@ -26,6 +26,10 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+//este array serve par criar dinâmicamente as opções das categorias
+//no html da view novo
+const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
+
 //criar a rota para ter a lista de todos os produtos
 //como a consulta ao MongoDB demora, a alternativa é criar uma
 //fx async para receber o pedido, este é o padrão para as consultas à BD
@@ -36,7 +40,7 @@ app.get("/produtos", async (req, res) => {
 
 //rota para o form para criar um novo produto
 app.get("/produtos/novo", (req,res) => {
-    res.render("produtos/novo");
+    res.render("produtos/novo", {categorias});
 })
 
 // a rota para oo pedido de criar o produto à BD implica async
@@ -60,7 +64,7 @@ app.get("/produtos/:id", async (req, res) => {
 app.get("/produtos/:id/editar", async (req,res) => {
     const {id} = req.params;
     const produto = await Produto.findById(id);
-    res.render("produtos/editar", {produto});
+    res.render("produtos/editar", {produto, categorias});
 })
 
 //rota para inserir a alteração no MongoDB
