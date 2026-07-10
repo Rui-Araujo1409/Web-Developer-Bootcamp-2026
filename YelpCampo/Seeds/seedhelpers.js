@@ -1,0 +1,35 @@
+module.exports.descriptores = [
+    "Mato",
+    "Velho",
+    "Pedra",
+    "Paredes",
+    "Ponte",
+    "Silencioso",
+    "Pinheiro",
+    "Monte",
+    "Feira",
+    "Alguidar",
+    "Coisa",
+    "Lobos",
+    "Oceano",
+    "Rio",
+    "Sujo",
+];
+
+module.exports.sítios = [
+    "Plano",
+    "Vila",
+    "Lago",
+    "Cavalo",
+    "Grande",
+    "Rural",
+    "Chato",
+    "Rio",
+    "Ribeiro",
+    "Baía",
+    "Fonte",
+    "Costa",
+    "Areia",
+    "Caça",
+    "Mata"
+];
