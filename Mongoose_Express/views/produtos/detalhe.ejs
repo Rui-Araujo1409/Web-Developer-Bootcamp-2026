@@ -12,7 +12,7 @@
     <h2><%= produto.nome %></h2>
     <ul>
         <li>Preço: <%=produto.preço%>€</li>
-        <li>Categoria: <%=produto.categoria%></li>
+        <li><a href="/produtos?categoria=<%=produto.categoria%>"><%=produto.categoria%></a></li>
     </ul>
 
     <section>
@@ -21,7 +21,9 @@
     <section>
         <button><a href="/produtos/<%=produto._id%>/editar">Editar o produto</a></button>
     </section>
-
+<form action="/produtos/<%= produto._id%>%>?_method=DELETE" method="post">
+    <button>Apagar produto</button>
+</form>
 </body>
 
 </html>

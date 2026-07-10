@@ -20,7 +20,7 @@ const conectarMongoBD = async () => {
 
 conectarMongoBD();
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
@@ -34,13 +34,21 @@ const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
 //como a consulta ao MongoDB demora, a alternativa é criar uma
 //fx async para receber o pedido, este é o padrão para as consultas à BD
 app.get("/produtos", async (req, res) => {
-    const produtos = await Produto.find({});
-    res.render("produtos/index", { produtos });
+    //adicionar a lógica para consultar por categorias
+    const { categoria } = req.query;
+    if (categoria) {
+        const produtos = await Produto.find({categoria});
+        res.render("produtos/index", {produtos, categoria});
+    } else {
+        const produtos = await Produto.find({});
+        res.render("produtos/index", { produtos, categoria: "Todos os produtos" });
+    }
+
 })
 
 //rota para o form para criar um novo produto
-app.get("/produtos/novo", (req,res) => {
-    res.render("produtos/novo", {categorias});
+app.get("/produtos/novo", (req, res) => {
+    res.render("produtos/novo", { categorias });
 })
 
 // a rota para oo pedido de criar o produto à BD implica async
@@ -55,26 +63,31 @@ app.post("/produtos", async (req, res) => {
 //padrão (neste caso /produtos/) têm que usar o :id
 //rota para ver detalhes do produto
 app.get("/produtos/:id", async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const produto = await Produto.findById(id);
-    res.render("produtos/detalhe", {produto});
+    res.render("produtos/detalhe", { produto });
 })
 
 //rota para o form para editar
-app.get("/produtos/:id/editar", async (req,res) => {
-    const {id} = req.params;
+app.get("/produtos/:id/editar", async (req, res) => {
+    const { id } = req.params;
     const produto = await Produto.findById(id);
-    res.render("produtos/editar", {produto, categorias});
+    res.render("produtos/editar", { produto, categorias });
 })
 
 //rota para inserir a alteração no MongoDB
-app.put("/produtos/:id", async (req,res) => {
-    const {id} = req.params;
-    const produto = await Produto.findByIdAndUpdate(id, req.body, {runValidators: true, returnDocument:'after'});
+app.put("/produtos/:id", async (req, res) => {
+    const { id } = req.params;
+    const produto = await Produto.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
     res.redirect(`/produtos/${produto._id}`);
 })
 
-
+//rota para apagar o produto
+app.delete("/produtos/:id", async (req, res) => {
+    const { id } = req.params;
+    const apagarProduto = await Produto.findByIdAndDelete(id);
+    res.redirect("/produtos");
+})
 
 
 

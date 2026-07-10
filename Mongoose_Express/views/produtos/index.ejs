@@ -6,7 +6,7 @@
     <title>Produtos disponíveis</title>
 </head>
 <body>
-    <h1>Todos os produtos disponíveis</h1>
+    <h1><%=categoria%> disponíveis</h1>
     <ul>
         <% for(let produto of produtos) {%>
         <li><a href="/produtos/<%=produto._id%>"><%=`${produto.nome}`%></a></li>
@@ -14,6 +14,10 @@
     </ul>
 
    <button><a href="/produtos/novo">Inserir um novo produto</a></button>
+   <% if (categoria !== "Todos os produtos") { %>
+     <button><a href="/produtos">Ver todos os produtos</a></button>
+   <% } %>
+  
     
 </body>
 </html>
