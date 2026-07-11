@@ -75,10 +75,10 @@ app.put("/parques/:id", async (req, res) => {
     res.redirect(`/parques/${parqueEditado._id}`);
 })
 
-app.delete("/parques/:id/apagar", async (req,res) => {
+app.delete("/parques/:id", async (req,res) => {
 const id = req.params.id;
 const parqueEliminar = await Parque.findByIdAndDelete(id);
-res.redirect("parques/index");
+res.render("parques/apagar");
 })
 
 app.listen(3000, () => console.log("Conectado na porta 3000"));
