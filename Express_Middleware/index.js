@@ -1,7 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
+const engine = require("ejs-mate");
 const servidor = express();
 
+
+servidor.engine("ejs", engine);
 //O Middleware são fxs que correm sempre que existe um pedido
 //e com o next(), passam o fluxo para o próximo middleware ou rota (se existirem)
 //sem o next() o fluxo pára aqui

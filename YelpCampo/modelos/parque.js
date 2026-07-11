@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const ParqueSchema = new Schema({
     título: String,
-    preço: String,
+    imagem: String,
+    preço: Number,
     descrição: String,
     localização: String
 });

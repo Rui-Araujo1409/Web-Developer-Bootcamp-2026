@@ -23,7 +23,8 @@ const seedBD = async () => {
             const aleatório = Math.floor(Math.random() * 1000);
             const parque = new Parque({
                 localização: `${cidades[aleatório].city}, ${cidades[aleatório].state}`,
-                título: `${amostra(descriptores)} ${amostra(sítios)}`
+                título: `${amostra(descriptores)} ${amostra(sítios)}`,
+                imagem: `https://picsum.photos/400?random=${Math.random()}`
             })
             await parque.save();
         }

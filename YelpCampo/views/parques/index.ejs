@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista dos Parques</title>
-</head>
-
-<body>
+<% layout("layouts/boilerplate") %>
     <h1>Todos os Parques</h1>
     <ul>
         <%for(let parque of parques) {%>
@@ -17,6 +8,3 @@
     </ul>
 
     <button><a href="/novo">Criar novo Parque</a></button>
-</body>
-
-</html>

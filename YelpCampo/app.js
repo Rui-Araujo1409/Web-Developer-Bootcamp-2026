@@ -5,6 +5,7 @@ const dotenv = require("dotenv").config();
 const methodOverride = require("method-override");
 const path = require("path");
 const morgan = require("morgan");
+const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
 
 
@@ -32,6 +33,7 @@ db.once("aberta", () => {
 
 conectarMongoBD();
 
+app.engine("ejs", engine);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
