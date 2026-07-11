@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const methodOverride = require("method-override");
 const path = require("path");
+const morgan = require("morgan");
 const Parque = require("./modelos/parque");
 
 
