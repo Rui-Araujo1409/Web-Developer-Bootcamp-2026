@@ -5,7 +5,10 @@ const Schema = mongoose.Schema;
 const ParqueSchema = new Schema({
     título: String,
     imagem: String,
-    preço: Number,
+    preço: {
+        type: Number,
+        min: 1
+    },
     descrição: String,
     localização: String
 });

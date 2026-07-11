@@ -1,22 +1,36 @@
 <% layout("layouts/boilerplate") %>
-    <h1>Novo Parque</h1>
-    <form action="/parques" method="post">
-        <section>
-            <label for="título">Nome do parque: </label>
-            <input type="text" name="título" id="título">
-        </section>
-        <section>
-            <label for="preço">Preço diário: </label>
-            <input type="text" name="preço" id="preço">
-        </section>
-        <section>
-            <label for="localização">Localização: </label>
-            <input type="text" name="localização" id="localização">
-        </section>
-        <section>
-            <label for="descrição">Insira uma descrição do parque:</label>
-            <br>
-            <textarea name="descrição" id="descrição" cols="50" rows="10"></textarea>
-        </section>
-<button>Criar</button><button><a href="/parques">Cancelar</a></button>
-    </form>
+
+<div class="row">
+    <h1 class="text-center mb-3">Novo Parque</h1>
+    <div class="col-6 offset-3">
+        <form action="/parques" method="post">
+            <section class="mb-3">
+                <label for="título" class="form-label">Nome do parque: </label>
+                <input type="text" name="título" id="título" class="form-control">
+            </section>
+            <section class="mb-3">
+
+                <label for="preço" class="form-label me-1">Preço diário: </label>
+                <div class="input-group">
+                    <input type="number" name="preço" id="preço" placeholder="0.00" class="form-control">
+                    <span class="input-group-text">€</span>
+                </div>
+            </section>
+            <section class="mb-3">
+                <label for="localização" class="form-label">Localização: </label>
+                <input type="text" name="localização" id="localização" class="form-control">
+            </section>
+            <section class="mb-3">
+                <label for="descrição" class="form-label">Insira uma descrição do parque:</label>
+                <br>
+                <textarea name="descrição" id="descrição" cols="50" rows="10" class="form-control"></textarea>
+            </section>
+            <section class="mb-3">
+                <label for="imagem" class="form-label">Insira um URL de uma imagem do parque:</label>
+                <input type="text" name="imagem" id="imagem" cols="50" rows="10" class="form-control">
+            </section>
+            <button class="btn btn-primary me-3">Criar</button><a href="/parques" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>
+</div>

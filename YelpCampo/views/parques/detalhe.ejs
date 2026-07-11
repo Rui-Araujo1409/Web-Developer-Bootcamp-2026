@@ -1,10 +1,10 @@
 <% layout("layouts/boilerplate") %>
-<h1>Informação sobre o Parque</h1>
 <section>
         <h1><%= parque.título %></h1>
         <h2><%= parque.localização %></h2>
         <h2>Preço diário: <%= parque.preço %></h2>
-        <h3><%= parque.descrição %></h3>
+        <p><%= parque.descrição %></p>
+        <img src="<%=parque.imagem%>" alt="imagem do parque">
 </section>
 <button><a href="/parques/<%=parque._id%>/editar">Editar o parque</a></button>
 <button><a href="/parques">Voltar à lista dos parques</a></button>

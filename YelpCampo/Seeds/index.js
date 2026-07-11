@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const Parque = require("../modelos/parque");
 const cidades = require("./cidades");
-const {descriptores, sítios} = require("./seedhelpers")
+const { descriptores, sítios } = require("./seedhelpers")
 
 
 
@@ -20,11 +20,14 @@ const seedBD = async () => {
         await Parque.deleteMany({});
         console.log("limpinho da silva");
         for (let i = 0; i < 50; i++) {
+            const preço = Math.floor(Math.random() * 50) + 10;
             const aleatório = Math.floor(Math.random() * 1000);
             const parque = new Parque({
                 localização: `${cidades[aleatório].city}, ${cidades[aleatório].state}`,
                 título: `${amostra(descriptores)} ${amostra(sítios)}`,
-                imagem: `https://picsum.photos/400?random=${Math.random()}`
+                imagem: `https://picsum.photos/400?random=${Math.random()}`,
+                descrição: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
+                preço
             })
             await parque.save();
         }
@@ -51,3 +54,4 @@ const conectarMongoBD = async () => {
 
 
 conectarMongoBD();
+
