@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parque</title>
+</head>
+<body>
+<h1>Informação sobre o Parque</h1>
+<section>
+        <h1><%= parque.título %></h1>
+        <h2><%= parque.localização %></h2>
+        <h2>Preço diário: <%= parque.preço %></h2>
+        <h3><%= parque.descrição %></h3>
+</section>
+<button><a href="/parques/<%=parque._id%>/editar">Editar o parque</a></button>
+<button><a href="/parques">Voltar à lista dos parques</a></button>
+<button><a href="/parques/<%=parque._id%>/apagar">Apagar o parque</a></button>
+</body>
+</html>

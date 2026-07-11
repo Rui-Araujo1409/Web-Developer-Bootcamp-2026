@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista dos Parques</title>
+</head>
+
+<body>
+    <h1>Todos os Parques</h1>
+    <ul>
+        <%for(let parque of parques) {%>
+        <li><a href="parques/<%=parque._id%>"><b><%=parque.título%></b></a></li>
+        <hr>
+        <%}%>
+    </ul>
+
+    <button><a href="/novo">Criar novo Parque</a></button>
+</body>
+
+</html>

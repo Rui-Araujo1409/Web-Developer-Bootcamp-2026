@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar</title>
+</head>
+<body>
+    <h1>Editar o parque</h1>
+    <form action="/parques/<%= parqueActual._id%>%>?_method=PUT" method="post">
+        <section>
+            <label for="título">Nome do parque: </label>
+            <input type="text" name="título" id="título" value="<%=parqueActual.título%>">
+        </section>
+        <section>
+            <label for="localização">Localização do parque: </label>
+            <input type="text" name="localização" id="localização" value="<%=parqueActual.localização%>">
+        </section>
+        <section>
+            <label for="preço">Preço diário: </label>
+            <input type="text" name="preço" id="preço" value="<%=parqueActual.preço%>">
+        </section>
+        <section>
+            <label for="descrição">Descrição do parque: </label>
+            <br>
+            <textarea name="descrição" id="descrição" cols="50" rows="10"><%=parqueActual.descrição%></textarea>
+        </section>
+        <button>Submeter alterações</button>
+    </form>
+</body>
+</html>

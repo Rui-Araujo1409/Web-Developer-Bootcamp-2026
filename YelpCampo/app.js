@@ -42,11 +42,43 @@ app.get("/", (req, res) => {
     res.render("home");
 })
 
-app.get("/criarparque", async (req, res) => {
-    const novoParque = new Parque({ título: "Zambujeira", preço: "50€", descrição: "Parque da aldeia da Zambujeira do Mar, perto de onde se fazia o festival Sudoeste", localização: "Zambujeira do mar" });
-    await novoParque.save();
-    res.send("Campo criado");
+app.get("/parques", async (req, res) => {
+    const parques = await Parque.find({});
+    res.render("parques/index", { parques });
 })
 
+app.get("/parques/:id", async (req, res) => {
+    const id = req.params.id
+    const parque = await Parque.findById(id);
+    res.render("parques/detalhe", { parque });
+})
+
+app.get("/novo", (req, res) => {
+    res.render("parques/novo");
+})
+
+app.post("/parques", async (req, res) => {
+    const novoParque = new Parque(req.body);
+    await novoParque.save();
+    res.redirect(`/parques/${novoParque._id}`);
+})
+
+app.get("/parques/:id/editar", async (req, res) => {
+    const id = req.params.id;
+    const parqueActual = await Parque.findById(id);
+    res.render("parques/editar", { parqueActual });
+})
+
+app.put("/parques/:id", async (req, res) => {
+    const id = req.params.id;
+    const parqueEditado = await Parque.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
+    res.redirect(`/parques/${parqueEditado._id}`);
+})
+
+app.delete("/parques/:id/apagar", async (req,res) => {
+const id = req.params.id;
+const parqueEliminar = await Parque.findByIdAndDelete(id);
+res.redirect("parques/index");
+})
 
 app.listen(3000, () => console.log("Conectado na porta 3000"));

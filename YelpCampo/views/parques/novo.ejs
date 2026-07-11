@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserir novo parque</title>
+</head>
+
+<body>
+    <h1>Novo Parque</h1>
+    <form action="/parques" method="post">
+        <section>
+            <label for="título">Nome do parque: </label>
+            <input type="text" name="título" id="título">
+        </section>
+        <section>
+            <label for="preço">Preço diário: </label>
+            <input type="text" name="preço" id="preço">
+        </section>
+        <section>
+            <label for="localização">Localização: </label>
+            <input type="text" name="localização" id="localização">
+        </section>
+        <section>
+            <label for="descrição">Insira uma descrição do parque:</label>
+            <br>
+            <textarea name="descrição" id="descrição" cols="50" rows="10"></textarea>
+        </section>
+<button>Criar</button><button><a href="/parques">Cancelar</a></button>
+    </form>
+
+</body>
+
+</html>
