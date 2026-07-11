@@ -1,13 +1,28 @@
 <% layout("layouts/boilerplate") %>
-<section>
-        <h1><%= parque.título %></h1>
-        <h2><%= parque.localização %></h2>
-        <h2>Preço diário: <%= parque.preço %></h2>
-        <p><%= parque.descrição %></p>
-        <img src="<%=parque.imagem%>" alt="imagem do parque">
-</section>
-<button><a href="/parques/<%=parque._id%>/editar">Editar o parque</a></button>
-<button><a href="/parques">Voltar à lista dos parques</a></button>
-<form action="/parques/<%=parque._id%>?_method=DELETE" method="post">
-<button>Apagar o parque</button>
-</form>
+<div class="row justify-content-center">
+        <div class="col-md-8 offset-md-2">
+                <section class="card p-2 text-center mb-3">
+                        <img src="<%=parque.imagem%>" alt="imagem do parque" class="img-fluid card-img-top">
+                        <div class="card-body">
+                                <h5 class="card-title mt-2"><%= parque.título %></h5>
+                                <p class="card-text"><%= parque.descrição %></p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><%= parque.localização %></li>
+                                <li class="list-group-item"><%= parque.preço %>€/noite</li>
+                        </ul>
+
+                        <section class="card-body">
+                                        <a href="/parques/<%=parque._id%>/editar"
+                                                class="btn btn-info card-link">Editar</a>
+                                        <form action="/parques/<%=parque._id%>?_method=DELETE" method="post" class="d-inline">
+                                                <button class="btn btn-danger my-3">Apagar</button>
+
+                                        </form>
+                                <a href="/parques" class="btn btn-secondary card-link">Lista dos parques</a>
+                        </section>
+                </section>
+
+        </div>
+</div>
+</div>

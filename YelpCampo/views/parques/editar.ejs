@@ -1,22 +1,34 @@
 <% layout("layouts/boilerplate") %>
-    <h1>Editar o parque</h1>
-    <form action="/parques/<%= parqueActual._id%>%>?_method=PUT" method="post">
-        <section>
-            <label for="título">Nome do parque: </label>
-            <input type="text" name="título" id="título" value="<%=parqueActual.título%>">
-        </section>
-        <section>
-            <label for="localização">Localização do parque: </label>
-            <input type="text" name="localização" id="localização" value="<%=parqueActual.localização%>">
-        </section>
-        <section>
-            <label for="preço">Preço diário: </label>
-            <input type="text" name="preço" id="preço" value="<%=parqueActual.preço%>">
-        </section>
-        <section>
-            <label for="descrição">Descrição do parque: </label>
-            <br>
-            <textarea name="descrição" id="descrição" cols="50" rows="10"><%=parqueActual.descrição%></textarea>
-        </section>
-        <button>Submeter alterações</button>
-    </form>
+<div class="row">
+    <h1 class="text-center mb-3">Editar o parque</h1>
+    <div class="col-6 offset-3">
+        <form action="/parques/<%= parqueActual._id%>%>?_method=PUT" method="post">
+            <section class="mb-3">
+                <label for="título" class="form-label">Nome: </label>
+                <input type="text" name="título" class="form-control" id="título" value="<%=parqueActual.título%>">
+            </section>
+            <section class="mb-3">
+                <label for="localização" class="form-label">Localização: </label>
+                <input type="text" name="localização" class="form-control" id="localização" value="<%=parqueActual.localização%>">
+            </section>
+            <section class="mb-3">
+                <label for="preço" class="form-label">Preço diário: </label>
+                <div class="input-group">
+                    <input type="text" name="preço" class="form-control" id="preço" value="<%=parqueActual.preço%>">
+                    <span class="input-group-text">€</span>
+                </div>
+            </section>
+            <section class="mb-3">
+                <label for="descrição" class="form-label">Descrição: </label>
+                <br>
+                <textarea name="descrição" id="descrição" cols="50" rows="10" class="form-control"><%=parqueActual.descrição%></textarea>
+            </section>
+            <section class="mb-3">
+                <label for="imagem" class="form-label">Insira um URL de uma imagem:</label>
+                <input type="text" name="imagem" id="imagem" cols="50" rows="10" class="form-control">
+            </section>
+            <button class="btn btn-primary">Submeter</button>
+            <a href="/parques/<%= parqueActual._id%>" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>
