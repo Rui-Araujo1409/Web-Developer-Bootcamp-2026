@@ -38,8 +38,8 @@ app.get("/produtos", async (req, res) => {
     //adicionar a lógica para consultar por categorias
     const { categoria } = req.query;
     if (categoria) {
-        const produtos = await Produto.find({categoria});
-        res.render("produtos/index", {produtos, categoria});
+        const produtos = await Produto.find({ categoria });
+        res.render("produtos/index", { produtos, categoria });
     } else {
         const produtos = await Produto.find({});
         res.render("produtos/index", { produtos, categoria: "Todos os produtos" });
@@ -53,45 +53,75 @@ app.get("/produtos/novo", (req, res) => {
     res.render("produtos/novo", { categorias });
 })
 
-// a rota para oo pedido de criar o produto à BD implica async
-app.post("/produtos", async (req, res) => {
-    const novoProduto = new Produto(req.body);
-    console.log(novoProduto);
-    await novoProduto.save();
-    res.redirect(`/produtos/${novoProduto._id}`);
+//Outro método para lidar com erros em fx async e para evitar ter que escrever sempre try...catch em todas as rotas
+//é envolver a fx callback numa outra fx que vai fazer o catch ao erro, exemplo:
+//irei usar esta fx utilitária na rota para editar um produto (e funcionou!)
+//não é preciso usar no Xpress 5
+const wrapAsync = (fx) => {
+    return function (req,res,next) {
+        fx(req,res,next).catch(err => next(err));
+    }
+}
+
+// a rota para o pedido de criar o produto à BD implica async
+///O Express 5 trata lida automaticamente com erros criados por
+///rotas ou middleware que retorna uma Promise e chama next(err) automaticamente
+app.post("/produtos", async (req, res, next) => {
+    //este try catch replica o que o xpress 5 faz automaticamente na mesma situação
+    try {
+        const novoProduto = new Produto(req.body);
+        await novoProduto.save();
+        res.redirect(`/produtos/${novoProduto._id}`);
+    } catch (e) {
+        //next(res.send("Nope"));
+        next(e);
+    }
+
 })
 
 //assim que o path tem :id as rotas seguintes com o mesmo
 //padrão (neste caso /produtos/) têm que usar o :id
 //rota para ver detalhes do produto
-    //para lidar com erros em fxc async, o throw new AppErros não vai funcionar
-    //tem que se usar o next e como parâmetro do next coloca-se então o new xxx
-    //exemplo; next(new AppErros("xxx", xxx)) => o next então é o 3º parâmetro na fx async
+//para lidar com erros em fxc async, o throw new AppErros não vai funcionar
+//tem que se usar o next e como parâmetro do next coloca-se então o new xxx
+//exemplo; next(new AppErros("xxx", xxx)) => o next então é o 3º parâmetro na fx async
 app.get("/produtos/:id", async (req, res, next) => {
     const { id } = req.params;
     const produto = await Produto.findById(id);
-    if(!produto) {
+    if (!produto) {
         //o return pára o fluxo e evita o erro do ejs disparado pela linha seguinte
         //também podia usar um if else ou ternário
-            //if(!produto) {return next(new AppErros("Produto não encontrado", 404));} else {res.render("produtos/detalhe", { produto });}
-       return next(new AppErros("Produto não encontrado", 404)); 
+        //if(!produto) {return next(new AppErros("Produto não encontrado", 404));} else {res.render("produtos/detalhe", { produto });}
+        return next(new AppErros("Produto não encontrado", 404));
     }
     res.render("produtos/detalhe", { produto });
 })
 
 //rota para o form para editar
 app.get("/produtos/:id/editar", async (req, res, next) => {
-    const { id } = req.params;
-    const produto = await Produto.findById(id);
-     !produto ? next(new AppErros("Produto não encontrado", 404)) : res.render("produtos/editar", { produto, categorias });
+    try {
+        const { id } = req.params;
+        const produto = await Produto.findById(id);
+        //aqui com o try catch não dá para usar o ternário => !produto ? next(new AppErros("xxx", 404)) : res.render("produtos/editar", { produto, categorias });
+        ///o catch nunca dispara pois o erro do mongoose do id é resolvido com o if else, erro de validação passa para a rota PUT
+        if (!produto) {
+            throw new AppErros("Produto não encontrado", 404)
+        } else {
+            res.render("produtos/editar", { produto, categorias });
+        }
+    } catch (e) {
+        next(e);
+    }
 })
 
 //rota para inserir a alteração no MongoDB
-app.put("/produtos/:id", async (req, res) => {
-    const { id } = req.params;
-    const produto = await Produto.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
-    res.redirect(`/produtos/${produto._id}`);
-})
+//testar o wrapAsync
+app.put("/produtos/:id", wrapAsync(async (req, res, next) => {
+    //aqui o try catch funciona porque é na validação que o mongoose dá o erro
+        const { id } = req.params;
+        const produto = await Produto.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
+        res.redirect(`/produtos/${produto._id}`);
+}))
 
 //rota para apagar o produto
 app.delete("/produtos/:id", async (req, res) => {
@@ -101,8 +131,8 @@ app.delete("/produtos/:id", async (req, res) => {
 })
 
 
-app.use((err,req,res,next) => {
-    const {status = 500, message = "Ups, algo correu mal..."} = err;
+app.use((err, req, res, next) => {
+    const { status = 500, message = "Ups, algo correu mal..." } = err;
     res.status(status).send(message);
 })
 
