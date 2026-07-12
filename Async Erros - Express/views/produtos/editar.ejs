@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produto</title>
+</head>
+<body>
+    <h1>Editar o produto</h1>
+    <form action="/produtos/<%= produto._id%>%>?_method=PUT" method="post">
+        <section>
+        <label for="nome">Insira o nome do produto: </label>
+        <input type="text" name="nome" id="nome" value="<%= produto.nome %>">
+        </section>
+        <section>
+        <label for="preço">Insira o preço do produto: </label>
+        <input type="number" name="preço" id="preço" value="<%= produto.preço %>">
+        </section>
+        <section>
+        <label for="categoria">Insira a categoria</label>
+        <select name="categoria" id="categoria">
+            <% for( let categoria of categorias) { %>
+            <option value="<%=categoria%>" <%= produto.categoria === categoria ? "selected" : ""  %>><%=categoria%></option>
+            <% } %>
+        </select>
+        </section>
+        <button>Submeter</button>
+    </form>
+
+    <button><a href="/produtos/<%=produto._id%>">Voltar à página do produto</a></button>
+</body>
+</html>

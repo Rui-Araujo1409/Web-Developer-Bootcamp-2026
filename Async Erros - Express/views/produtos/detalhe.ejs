@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= produto.nome %></title>
+</head>
+
+<body>
+    <h1>Ficha do Produto</h1>
+    <h2><%= produto.nome %></h2>
+    <ul>
+        <li>Preço: <%=produto.preço%>€</li>
+        <li><a href="/produtos?categoria=<%=produto.categoria%>"><%=produto.categoria%></a></li>
+    </ul>
+
+    <section>
+        <button><a href="/produtos">Voltar à lista dos produtos</a></button>
+    </section>
+    <section>
+        <button><a href="/produtos/<%=produto._id%>/editar">Editar o produto</a></button>
+    </section>
+<form action="/produtos/<%= produto._id%>%>?_method=DELETE" method="post">
+    <button>Apagar produto</button>
+</form>
+</body>
+
+</html>

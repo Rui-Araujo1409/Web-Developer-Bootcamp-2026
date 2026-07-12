@@ -81,6 +81,10 @@ servidor.get("/segredo2", fxVerificarPass, (req, res) => {
     res.send("A morticia foi o meu segundo animal de estimação");
 })
 
+servidor.get("/admin", (req,res) => {
+    throw new AppErros("VERBOTEN! Não tem autorização!", 403);
+})
+
 //este middleware só corre quando nenhum pedido feito corresponde a uma rota
 //serve para construir uma resposta 404
 //pode ser res.status(404).send(XXXX) para o cliente receber um status 404
