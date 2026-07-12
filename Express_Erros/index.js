@@ -1,10 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
-const engine = require("ejs-mate");
 const servidor = express();
+const AppErros = require("./appErro");
 
-
-servidor.engine("ejs", engine);
 //O Middleware são fxs que correm sempre que existe um pedido
 //e com o next(), passam o fluxo para o próximo middleware ou rota (se existirem)
 //sem o next() o fluxo pára aqui
@@ -40,8 +38,12 @@ servidor.use("/segredo", (req, res, next) => {
     if (pass === "nikita") {
         next();
     }
-    res.send("Nope, a pass não é essa...");
+    //retornar um Error() em vez de res.send permite usar o middleware para os erros criados por nós
+    //throw new Error("Nope, a pass não é essa...");
+    //exemplo de uma classe criado por nós para lidar com o erro
+    throw new AppErros("é preciso uma pass", 401);
 })
+
 
 
 //fx para callback para verificar a pass
@@ -50,7 +52,8 @@ const fxVerificarPass = (req, res, next) => {
     if (pass === "morticia") {
         next();
     }
-    res.send("Nope, a pass não é essa...");
+    //throw new Error("Nope, a pass não é essa...");
+    throw new AppErros("é preciso uma pass", 401);
 }
 
 
@@ -66,6 +69,10 @@ servidor.get("/gatos", (req, res) => {
     res.send("Miau!");
 })
 
+servidor.get("/erro", (req,res) => {
+    galinha.voa();
+})
+
 servidor.get("/segredo", (req, res) => {
     res.send("A nikita foi o meu primeiro animal de estimação");
 })
@@ -77,7 +84,26 @@ servidor.get("/segredo2", fxVerificarPass, (req, res) => {
 //este middleware só corre quando nenhum pedido feito corresponde a uma rota
 //serve para construir uma resposta 404
 //pode ser res.status(404).send(XXXX) para o cliente receber um status 404
-servidor.use((req, res, next) => res.send("Nope, não existe..."))
+servidor.use((req, res, next) => res.send("Nope, não existe..."));
 
+/* servidor.use((err, req, res, next) => {
+    console.log("*********************************");
+    console.log("**************ERRO***************");
+    console.log("*********************************");
+    console.log(err);
+    //depois podemos colocar um res.status().send() para apresentar algo
+    //res.status(500).send("Oh pá, algo não correu bem...");
+    //mas como o res.send() pára o fluxo, podemos colocar um next() mas aqui
+    //se queremos passar o fluxo para outra fx para lidar com o erro temos que colocar
+    //next(err) err é o parâmetro no erro middlware
+    //next(err);
+}) */
+
+    //criar um error handler para erros que não têm status (exemplo, error de sintaxe)
+    servidor.use((err, req, res, next) => {
+        //retirar o statusCode do obj err (que vem da classe AppErros) e dar um default de 500, idem para a mensagem
+        const {status = 500, message = "Algo correu mal..."} = err;
+        res.status(status).send(message);
+    })
 
 servidor.listen(3000, () => console.log("A ouvir na porta 3000"));
