@@ -4,6 +4,7 @@ const methodOverride = require("method-override");
 const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+const Joi = require("joi");
 
 const Produto = require("./Modelos/produto");
 const AppErros = require("../Express_Erros/appErro");

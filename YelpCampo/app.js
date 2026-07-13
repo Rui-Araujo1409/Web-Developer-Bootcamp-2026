@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
 const AppErros = require("./utils/appErros");
+const Joi = require("joi");
 
 
 const conectarMongoBD = async () => {
@@ -62,7 +63,22 @@ app.get("/novo", (req, res) => {
     res.render("parques/novo");
 })
 
-app.post("/parques", async (req, res) => {
+app.post("/parques", async (req, res, next) => {
+     //construir o esquema com o Joi
+    const parqueEsquema = Joi.object({
+        título: Joi.string().required(),
+       // localização: Joi.string().required(),
+        preço: Joi.number().required().min(10),
+       // imagem: Joi.string().required(),
+       // descrição: Joi.string().required()
+    })
+    //retirar o obj error da validação
+    const  {error} = parqueEsquema.validate(req.body);
+    if(error) {
+        //o retorno de error.details é um array, constroi-se uma string com o retorno
+        const msg = error.details.map((item) => item.message).join(",");
+        next(new AppErros(msg, 400));
+    } 
     const novoParque = new Parque(req.body);
     await novoParque.save();
     res.redirect(`/parques/${novoParque._id}`);
