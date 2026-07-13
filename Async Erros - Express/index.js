@@ -130,6 +130,25 @@ app.delete("/produtos/:id", async (req, res) => {
     res.redirect("/produtos");
 })
 
+//como lidar com erros específicos do Mongoose
+//fx para lidar com os erros
+const lidarErroValidação = (err) => {
+    console.log(err.errors.properties);
+    //para esta fx retornar algo tem de ter return
+    return err;
+    //também se pode criar um erro com a classe (mensagem personalizada, e a que vem do obj err e o statusCode)
+    //return new AppErros(`Validação falhou...${err.message}`, 400);
+}
+
+app.use((err, req,res,next) => {
+    console.log(err.name);
+    //especificar que tipo de erro vai ser tratado com a fx anterior
+    if(err.name === "ValidationError") {
+        err = lidarErroValidação(err)
+    }
+    next(err);
+})
+
 
 app.use((err, req, res, next) => {
     const { status = 500, message = "Ups, algo correu mal..." } = err;

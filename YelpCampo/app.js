@@ -7,6 +7,7 @@ const path = require("path");
 const morgan = require("morgan");
 const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
+const AppErros = require("./utils/appErros");
 
 
 const conectarMongoBD = async () => {
@@ -50,10 +51,11 @@ app.get("/parques", async (req, res) => {
     res.render("parques/index", { parques });
 })
 
-app.get("/parques/:id", async (req, res) => {
+app.get("/parques/:id", async (req, res, next) => {
     const id = req.params.id
     const parque = await Parque.findById(id);
     res.render("parques/detalhe", { parque });
+    next(new AppErros("Parque não existe", 404));
 })
 
 app.get("/novo", (req, res) => {
@@ -82,6 +84,16 @@ app.delete("/parques/:id", async (req,res) => {
 const id = req.params.id;
 const parqueEliminar = await Parque.findByIdAndDelete(id);
 res.render("parques/apagar");
+})
+
+
+app.all("/{*path}", (req,res,next) => {
+    next(new AppErros("Página não encontrada", 404));
+})
+
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = "Algo correu mal..."} = err;
+    res.status(statusCode).render("erros", {message, statusCode});
 })
 
 app.listen(3000, () => console.log("Conectado na porta 3000"));
