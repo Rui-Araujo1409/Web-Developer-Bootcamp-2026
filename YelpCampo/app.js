@@ -8,7 +8,8 @@ const morgan = require("morgan");
 const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
 const AppErros = require("./utils/appErros");
-const Joi = require("joi");
+const Joi = require("joi"); //
+const {parqueEsquema} = require("./esquemaJoi.js");
 
 
 const conectarMongoBD = async () => {
@@ -42,6 +43,27 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+//fx para a validação, aqui tem de se acrescentar o next() para o fluxo continuar
+const validarParque = (req, res, next) => {{
+    //depois passamos o esquema para o seu próprio ficheiro
+      /*   const parqueEsquema = Joi.object({
+        título: Joi.string().required(),
+        localização: Joi.string().required(),
+        preço: Joi.number().required().min(10),
+        imagem: Joi.string().required(),
+        descrição: Joi.string().required()
+    }) */
+    //retirar o obj error da validação
+    const  {error} = parqueEsquema.validate(req.body);
+    if(error) {
+        //o retorno de error.details é um array, constroi-se uma string com o retorno
+        const msg = error.details.map((item) => item.message).join(",");
+       return next(new AppErros(msg, 400));
+    }  else {
+        next();
+    }
+}}
+
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -55,30 +77,32 @@ app.get("/parques", async (req, res) => {
 app.get("/parques/:id", async (req, res, next) => {
     const id = req.params.id
     const parque = await Parque.findById(id);
+    if(!parque) {next(new AppErros("Parque não existe", 404));};
     res.render("parques/detalhe", { parque });
-    next(new AppErros("Parque não existe", 404));
 })
 
 app.get("/novo", (req, res) => {
     res.render("parques/novo");
 })
 
-app.post("/parques", async (req, res, next) => {
+app.post("/parques", validarParque, async (req, res, next) => {
      //construir o esquema com o Joi
-    const parqueEsquema = Joi.object({
+     //para o primeiro exemplo construi-se o esquema dentro da routa
+     //mas como se quer reutilizar o melhor é criar uma fx (ver mais acima)
+   /*  const parqueEsquema = Joi.object({
         título: Joi.string().required(),
-       // localização: Joi.string().required(),
+        localização: Joi.string().required(),
         preço: Joi.number().required().min(10),
-       // imagem: Joi.string().required(),
-       // descrição: Joi.string().required()
+        imagem: Joi.string().required(),
+        descrição: Joi.string().required()
     })
     //retirar o obj error da validação
     const  {error} = parqueEsquema.validate(req.body);
     if(error) {
         //o retorno de error.details é um array, constroi-se uma string com o retorno
         const msg = error.details.map((item) => item.message).join(",");
-        next(new AppErros(msg, 400));
-    } 
+       return next(new AppErros(msg, 400));
+    }  */
     const novoParque = new Parque(req.body);
     await novoParque.save();
     res.redirect(`/parques/${novoParque._id}`);
@@ -90,7 +114,7 @@ app.get("/parques/:id/editar", async (req, res) => {
     res.render("parques/editar", { parqueActual });
 })
 
-app.put("/parques/:id", async (req, res) => {
+app.put("/parques/:id", validarParque, async (req, res) => {
     const id = req.params.id;
     const parqueEditado = await Parque.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
     res.redirect(`/parques/${parqueEditado._id}`);
