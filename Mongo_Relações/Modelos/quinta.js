@@ -89,7 +89,7 @@ const criarProduto = async (nome, preço) => {
 //com a referência (ref) da propriedade a que queremos apontar, aqui .populate(produtos)
 const encontrarQuinta = async (nome) => {
     const quinta = await Quinta.findOne({nome}).populate("produtos");
-    console.log(JSON.stringify(quinta, null, 2));
+    console.log(quinta);
 }
 
 encontrarQuinta("Quinta das Vacas");
