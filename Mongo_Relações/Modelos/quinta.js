@@ -36,6 +36,7 @@ const quintaSchema = new Schema({
     nome: String,
     localidade: String,
     //aqui vou apontar esta propriedade para um ObjectId dentro do Schema (por extenso seria mongoose.Schema.Types.ObjectId)
+    //e tenho que colocar uma propriedade ref que vai apontar para uma colecção no MongoDB
     produtos: [{type: Schema.Types.ObjectId, ref: "Produto"}]
 })
 
@@ -65,5 +66,32 @@ const Quinta = mongoose.model("Quinta", quintaSchema);
 
 const criarQuinta = async () => {
 const quinta = await new Quinta({nome: "Quinta das Vacas", localidade: "Alguidar de Baixo"});
-Quinta.quinta.save();
+const melão = await Produto.findOne({nome: "Melão branco"});
+quinta.produtos.push(melão);
+await quinta.save();
+console.log(quinta);
 }
+
+//criarQuinta();
+
+
+const criarProduto = async (nome, preço) => {
+    const quinta = await Quinta.findOne({nome: "Quinta das Vacas"})
+    const uva = await new Produto({nome , preço});
+    quinta.produtos.push(uva);
+    quinta.save()
+};
+
+//criarProduto("Uva branca", 6);
+
+//no console (apenas se vê os IDs dos produtos)
+//se quisermos ver toda a info do produto temos de usar o método .populate(),
+//com a referência (ref) da propriedade a que queremos apontar, aqui .populate(produtos)
+const encontrarQuinta = async (nome) => {
+    const quinta = await Quinta.findOne({nome}).populate("produtos");
+    console.log(JSON.stringify(quinta, null, 2));
+}
+
+encontrarQuinta("Quinta das Vacas");
+
+
