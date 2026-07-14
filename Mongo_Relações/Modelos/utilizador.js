@@ -1,3 +1,5 @@
+//este modelo apresenta a relação de um para poucos
+
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
