@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= quinta.nome %></title>
+</head>
+
+<body>
+    <h1>Ficha da Quinta</h1>
+    <h2><%= quinta.nome %></h2>
+    <ul>
+        <li>Localidade: <%=quinta.localidade%></li>
+        <li>Email: <%=quinta.email%></a></li>
+    </ul>
+
+    <section>
+        <button><a href="/quintas">Voltar à lista das quintas</a></button>
+    </section>
+    <section>
+        <button><a href="/quintas/<%=quinta._id%>/editar">Editar a quinta</a></button>
+    </section>
+<form action="/quintas/<%= quinta._id%>%>?_method=DELETE" method="post">
+    <button>Apagar a quinta</button>
+</form>
+</body>
+
+</html>

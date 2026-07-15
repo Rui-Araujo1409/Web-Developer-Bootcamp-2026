@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista das Quintas</title>
+</head>
+<body>
+<h1>Lista das quintas da plataforma</h1>
+    <ul>
+        <% for(let quinta of quintas) {%>
+        <li><a href="/quintas/<%=quinta._id%>"><%=`${quinta.nome}`%></a></li>
+        <li><%=quinta.localidade%></li>
+        <li>Email: <%= quinta.email %></li>
+         <hr>
+        <%}%>
+           
+    </ul>
+
+
+   <button><a href="/quintas/nova">Inserir uma nova quinta</a></button>  
+    
+</body>
+</html>

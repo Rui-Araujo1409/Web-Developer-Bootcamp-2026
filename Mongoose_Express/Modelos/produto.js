@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const {Schema} = mongoose;
 
-const produtoSchema = new mongoose.Schema({
+const produtoSchema = new Schema({
     nome: {
         type: String,
         required: true
@@ -14,7 +15,9 @@ const produtoSchema = new mongoose.Schema({
         type: String,
         lowercase: true,
         enum: ["fruta", "vegetais", "lacticínios"]
-    }
+    },
+    //vamos inserir aqui a relação com a quinta
+    quinta:{type: Schema.Types.ObjectId, ref: "Quinta"}
 });
 
 const Produto = mongoose.model("Produto", produtoSchema); 

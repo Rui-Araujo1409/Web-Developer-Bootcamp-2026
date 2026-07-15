@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
 const Produto = require("./Modelos/produto");
+const Quinta = require("./Modelos/quinta");
 
 const conectarMongoBD = async () => {
     try {
@@ -26,6 +27,30 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+
+//ROTAS PARA AS QUINTAS
+app.get("/quintas", async (req,res) => {
+    const quintas = await Quinta.find({});
+    res.render("quintas/index", {quintas})
+})
+
+app.get("/quintas/nova", (req,res) => {
+    res.render("quintas/nova");
+})
+
+app.post("/quintas", async (req,res) => {
+    const novaQuinta = new Quinta(req.body);
+    await novaQuinta.save();
+    res.redirect(`/quintas/${novaQuinta._id}`);
+})
+
+app.get("/quintas/:id", async (req, res) => {
+    const { id } = req.params;
+    const quinta = await Quinta.findById(id);
+    res.render("quintas/detalhe", { quinta });
+})
+
+//ROTAS DOS PRODUTOS
 //este array serve par criar dinâmicamente as opções das categorias
 //no html da view novo
 const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
@@ -51,7 +76,7 @@ app.get("/produtos/novo", (req, res) => {
     res.render("produtos/novo", { categorias });
 })
 
-// a rota para oo pedido de criar o produto à BD implica async
+// a rota para o pedido de criar o produto à BD implica async
 app.post("/produtos", async (req, res) => {
     const novoProduto = new Produto(req.body);
     console.log(novoProduto);
