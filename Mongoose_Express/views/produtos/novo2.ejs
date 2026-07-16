@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo produto</title>
+</head>
+<body>
+    <h1><%= quinta.nome%></h1>
+    <h2>Adicionar produto</h2>
+    <form action="/quintas/<%=id%>/produtos" method="post">
+        <section>
+        <label for="nome">Insira o nome do produto: </label>
+        <input type="text" name="nome" id="nome">
+        </section>
+        <section>
+        <label for="preço">Insira o preço do produto: </label>
+        <input type="number" name="preço" id="preço">
+        </section>
+        <section>
+        <label for="categoria">Insira a categoria</label>
+        <select name="categoria" id="categoria">
+            <% for( let categoria of categorias ) { %>
+            <option value="<%=categoria%>"><%=categoria%></option>
+            <% } %>
+        </select>
+        </section>
+        <button>Submeter</button>
+    </form>
+    <button><a href="/quintas/<%= id %>">Voltar à quinta</a></button>
+</body>
+</html>

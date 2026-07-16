@@ -13,6 +13,7 @@
     <ul>
         <li>Preço: <%=produto.preço%>€</li>
         <li><a href="/produtos?categoria=<%=produto.categoria%>"><%=produto.categoria%></a></li>
+        <li><a href="/quintas/<%= produto.quinta._id %>"><%= produto.quinta.nome %></a>, <%= produto.quinta.localidade %></li>
     </ul>
 
     <section>

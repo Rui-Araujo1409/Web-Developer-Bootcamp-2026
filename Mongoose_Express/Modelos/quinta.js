@@ -17,6 +17,6 @@ const quitaSchema = new Schema({
     }]
 })
 
-const Quinta = mongoose.model("QUinta", quitaSchema);
+const Quinta = mongoose.model("Quinta", quitaSchema);
 
 module.exports = Quinta;

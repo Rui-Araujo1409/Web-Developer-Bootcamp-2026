@@ -27,18 +27,21 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+//este array serve par criar dinâmicamente as opções das categorias
+//no html da view novo
+const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
 
 //ROTAS PARA AS QUINTAS
-app.get("/quintas", async (req,res) => {
+app.get("/quintas", async (req, res) => {
     const quintas = await Quinta.find({});
-    res.render("quintas/index", {quintas})
+    res.render("quintas/index", { quintas })
 })
 
-app.get("/quintas/nova", (req,res) => {
+app.get("/quintas/nova", (req, res) => {
     res.render("quintas/nova");
 })
 
-app.post("/quintas", async (req,res) => {
+app.post("/quintas", async (req, res) => {
     const novaQuinta = new Quinta(req.body);
     await novaQuinta.save();
     res.redirect(`/quintas/${novaQuinta._id}`);
@@ -46,14 +49,40 @@ app.post("/quintas", async (req,res) => {
 
 app.get("/quintas/:id", async (req, res) => {
     const { id } = req.params;
-    const quinta = await Quinta.findById(id);
+    //const quinta = await Quinta.findById(id);
+    //para popular os produtos temos de acrescentar .populate("produtos")
+    const quinta = await Quinta.findById(id).populate("produtos");
     res.render("quintas/detalhe", { quinta });
 })
 
+//rota para apresentar um formulário para inserir um produto associado a uma quinta
+app.get("/quintas/:id/produtos/novo", async (req, res) => {
+    const { id } = req.params;
+    const quinta = await Quinta.findById(id)
+    res.render("produtos/novo2", { categorias, id, quinta })
+})
+
+//rota para o post do formulário anterior
+app.post("/quintas/:id/produtos", async (req, res) => {
+    //id da quinta
+    const { id } = req.params;
+    //para encontrar a quinta
+    const quinta = await Quinta.findById(id);
+    //elementos do produto
+    const { nome, preço, categoria } = req.body;
+    //criar novo produto
+    const novoProduto = new Produto({ nome, preço, categoria });
+    //associar o produto à quinta
+    quinta.produtos.push(novoProduto);
+    //associar a quinta ao produto
+    novoProduto.quinta = quinta;
+    //gravar o produto e quinta
+    await novoProduto.save();
+    await quinta.save();
+    res.redirect(`/quintas/${id}`);
+})
+
 //ROTAS DOS PRODUTOS
-//este array serve par criar dinâmicamente as opções das categorias
-//no html da view novo
-const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
 
 //criar a rota para ter a lista de todos os produtos
 //como a consulta ao MongoDB demora, a alternativa é criar uma
@@ -62,8 +91,8 @@ app.get("/produtos", async (req, res) => {
     //adicionar a lógica para consultar por categorias
     const { categoria } = req.query;
     if (categoria) {
-        const produtos = await Produto.find({categoria});
-        res.render("produtos/index", {produtos, categoria});
+        const produtos = await Produto.find({ categoria });
+        res.render("produtos/index", { produtos, categoria });
     } else {
         const produtos = await Produto.find({});
         res.render("produtos/index", { produtos, categoria: "Todos os produtos" });
@@ -89,7 +118,7 @@ app.post("/produtos", async (req, res) => {
 //rota para ver detalhes do produto
 app.get("/produtos/:id", async (req, res) => {
     const { id } = req.params;
-    const produto = await Produto.findById(id);
+    const produto = await Produto.findById(id).populate("quinta");
     res.render("produtos/detalhe", { produto });
 })
 
