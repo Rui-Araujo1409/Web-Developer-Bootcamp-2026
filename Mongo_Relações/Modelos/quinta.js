@@ -41,6 +41,7 @@ const quintaSchema = new Schema({
 })
 
 
+
 //definir os modelos
 const Produto = mongoose.model("Produto", produtoSchema);
 

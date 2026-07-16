@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+//para o middleware funcionar temos de importar o modelo do Produto
+const Produto = require("./produto");
 const {Schema} = mongoose;
 
-const quitaSchema = new Schema({
+const quintaSchema = new Schema({
     nome: {
         type: String,
         required: [true, "A quinta deve ter um nome."]
@@ -17,6 +19,24 @@ const quitaSchema = new Schema({
     }]
 })
 
-const Quinta = mongoose.model("Quinta", quitaSchema);
+//o Mongoose Middleware tem que ser colocado antes dos Modelos, a seguir aos esquemas
+//o middleware pre no caso de apagar a quinta o data está undefined pois é chamado
+//antes de apagar a quinta
+/* quintaSchema.pre("findOneAndDelete", async function(data) {
+    console.log("PRE Middleware");
+    console.log(data);
+}) */
+
+//este é o que funciona par apagar a quinta e retornar os produtos
+
+quintaSchema.post("findOneAndDelete", async function(quinta) {
+//o if para o caso de haver produtos
+if(quinta.produtos.length) {
+    const dadosApagados = await Produto.deleteMany({_id: {$in: quinta.produtos}}); //o operador crucial é $in do Mongoose
+    console.log(dadosApagados);
+}
+})
+
+const Quinta = mongoose.model("Quinta", quintaSchema);
 
 module.exports = Quinta;

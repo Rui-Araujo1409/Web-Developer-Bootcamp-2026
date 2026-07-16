@@ -37,6 +37,12 @@ app.get("/quintas", async (req, res) => {
     res.render("quintas/index", { quintas })
 })
 
+app.delete("/quintas/:id", async (req,res) => {
+    const {id} = req.params;
+    const apagarQuinta = await Quinta.findByIdAndDelete(id);
+    res.redirect("/quintas");
+})
+
 app.get("/quintas/nova", (req, res) => {
     res.render("quintas/nova");
 })
