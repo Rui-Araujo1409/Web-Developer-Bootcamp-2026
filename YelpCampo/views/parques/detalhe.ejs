@@ -13,16 +13,28 @@
                         </ul>
 
                         <section class="card-body">
-                                        <a href="/parques/<%=parque._id%>/editar"
-                                                class="btn btn-info card-link">Editar</a>
-                                        <form action="/parques/<%=parque._id%>?_method=DELETE" method="post" class="d-inline">
-                                                <button class="btn btn-danger my-3">Apagar</button>
+                                <a href="/parques/<%=parque._id%>/editar" class="btn btn-info card-link">Editar</a>
+                                <form action="/parques/<%=parque._id%>?_method=DELETE" method="post" class="d-inline">
+                                        <button class="btn btn-danger my-3">Apagar</button>
 
-                                        </form>
+                                </form>
                                 <a href="/parques" class="btn btn-secondary card-link">Lista dos parques</a>
                         </section>
                 </section>
-
+                <h2>Deixe aqui a sua avaliação</h2>
+                <form action="/parques/<%= parque._id %>/avaliacao" method="post">
+                        <section class="mb-3">
+                                <label for="pontuação" class="form-label">Insira a sua pontuação de 1 (pior) a 5
+                                        (melhor)</label>
+                                <input type="range" name="pontuação" id="pontuação" min="1" max="5"
+                                        class="form-control form-range">
+                        </section>
+                        <section class="my-3">
+                                <label for="avaliação" class="form-label">Insira a sua avaliação</label>
+                                <textarea name="avaliação" id="avaliação" class="form-control"></textarea>
+                        </section>
+                        <button class="btn btn-success mb-3">Submeter</button>
+                </form>
         </div>
 </div>
 </div>

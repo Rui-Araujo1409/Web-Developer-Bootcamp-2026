@@ -10,7 +10,11 @@ const ParqueSchema = new Schema({
         min: 1
     },
     descrição: String,
-    localização: String
+    localização: String,
+    avaliações: [{
+        type: Schema.Types.ObjectId,
+        ref: "Avaliação"
+    }]
 });
 
 module.exports = mongoose.model("Parques", ParqueSchema);

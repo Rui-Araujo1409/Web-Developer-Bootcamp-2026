@@ -9,7 +9,8 @@ const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
 const AppErros = require("./utils/appErros");
 const Joi = require("joi"); //
-const {parqueEsquema} = require("./esquemaJoi.js");
+const { parqueEsquema } = require("./esquemaJoi.js");
+const Avaliação = require("./modelos/avaliações.js");
 
 
 const conectarMongoBD = async () => {
@@ -44,25 +45,27 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 //fx para a validação, aqui tem de se acrescentar o next() para o fluxo continuar
-const validarParque = (req, res, next) => {{
-    //depois passamos o esquema para o seu próprio ficheiro
-      /*   const parqueEsquema = Joi.object({
-        título: Joi.string().required(),
-        localização: Joi.string().required(),
-        preço: Joi.number().required().min(10),
-        imagem: Joi.string().required(),
-        descrição: Joi.string().required()
-    }) */
-    //retirar o obj error da validação
-    const  {error} = parqueEsquema.validate(req.body);
-    if(error) {
-        //o retorno de error.details é um array, constroi-se uma string com o retorno
-        const msg = error.details.map((item) => item.message).join(",");
-       return next(new AppErros(msg, 400));
-    }  else {
-        next();
+const validarParque = (req, res, next) => {
+    {
+        //depois passamos o esquema para o seu próprio ficheiro
+        /*   const parqueEsquema = Joi.object({
+          título: Joi.string().required(),
+          localização: Joi.string().required(),
+          preço: Joi.number().required().min(10),
+          imagem: Joi.string().required(),
+          descrição: Joi.string().required()
+      }) */
+        //retirar o obj error da validação
+        const { error } = parqueEsquema.validate(req.body);
+        if (error) {
+            //o retorno de error.details é um array, constroi-se uma string com o retorno
+            const msg = error.details.map((item) => item.message).join(",");
+            return next(new AppErros(msg, 400));
+        } else {
+            next();
+        }
     }
-}}
+}
 
 
 app.get("/", (req, res) => {
@@ -77,7 +80,7 @@ app.get("/parques", async (req, res) => {
 app.get("/parques/:id", async (req, res, next) => {
     const id = req.params.id
     const parque = await Parque.findById(id);
-    if(!parque) {next(new AppErros("Parque não existe", 404));};
+    if (!parque) { next(new AppErros("Parque não existe", 404)); };
     res.render("parques/detalhe", { parque });
 })
 
@@ -86,23 +89,23 @@ app.get("/novo", (req, res) => {
 })
 
 app.post("/parques", validarParque, async (req, res, next) => {
-     //construir o esquema com o Joi
-     //para o primeiro exemplo construi-se o esquema dentro da routa
-     //mas como se quer reutilizar o melhor é criar uma fx (ver mais acima)
-   /*  const parqueEsquema = Joi.object({
-        título: Joi.string().required(),
-        localização: Joi.string().required(),
-        preço: Joi.number().required().min(10),
-        imagem: Joi.string().required(),
-        descrição: Joi.string().required()
-    })
-    //retirar o obj error da validação
-    const  {error} = parqueEsquema.validate(req.body);
-    if(error) {
-        //o retorno de error.details é um array, constroi-se uma string com o retorno
-        const msg = error.details.map((item) => item.message).join(",");
-       return next(new AppErros(msg, 400));
-    }  */
+    //construir o esquema com o Joi
+    //para o primeiro exemplo construi-se o esquema dentro da routa
+    //mas como se quer reutilizar o melhor é criar uma fx (ver mais acima)
+    /*  const parqueEsquema = Joi.object({
+         título: Joi.string().required(),
+         localização: Joi.string().required(),
+         preço: Joi.number().required().min(10),
+         imagem: Joi.string().required(),
+         descrição: Joi.string().required()
+     })
+     //retirar o obj error da validação
+     const  {error} = parqueEsquema.validate(req.body);
+     if(error) {
+         //o retorno de error.details é um array, constroi-se uma string com o retorno
+         const msg = error.details.map((item) => item.message).join(",");
+        return next(new AppErros(msg, 400));
+     }  */
     const novoParque = new Parque(req.body);
     await novoParque.save();
     res.redirect(`/parques/${novoParque._id}`);
@@ -120,20 +123,29 @@ app.put("/parques/:id", validarParque, async (req, res) => {
     res.redirect(`/parques/${parqueEditado._id}`);
 })
 
-app.delete("/parques/:id", async (req,res) => {
-const id = req.params.id;
-const parqueEliminar = await Parque.findByIdAndDelete(id);
-res.render("parques/apagar");
+app.delete("/parques/:id", async (req, res) => {
+    const id = req.params.id;
+    const parqueEliminar = await Parque.findByIdAndDelete(id);
+    res.render("parques/apagar");
 })
 
+app.post("/parques/:id/avaliacao", async (req, res) => {
+    const { id } = req.params;
+    const parque = await Parque.findById(id);
+    const avaliação = new Avaliação(req.body);
+    parque.avaliações.push(avaliação);
+    await avaliação.save();
+    await parque.save();
+    res.redirect(`/parques/${id}`);
+})
 
-app.all("/{*path}", (req,res,next) => {
+app.all("/{*path}", (req, res, next) => {
     next(new AppErros("Página não encontrada", 404));
 })
 
 app.use((err, req, res, next) => {
-    const {statusCode = 500, message = "Algo correu mal..."} = err;
-    res.status(statusCode).render("erros", {message, statusCode});
+    const { statusCode = 500, message = "Algo correu mal..." } = err;
+    res.status(statusCode).render("erros", { message, statusCode });
 })
 
 app.listen(3000, () => console.log("Conectado na porta 3000"));
