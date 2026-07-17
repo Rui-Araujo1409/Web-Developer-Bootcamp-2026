@@ -9,7 +9,7 @@ const engine = require("ejs-mate");
 const Parque = require("./modelos/parque");
 const AppErros = require("./utils/appErros");
 const Joi = require("joi"); //
-const { parqueEsquema } = require("./esquemaJoi.js");
+const { parqueEsquema, avaliaçãoEsquema } = require("./esquemaJoi.js");
 const Avaliação = require("./modelos/avaliações.js");
 
 
@@ -67,6 +67,15 @@ const validarParque = (req, res, next) => {
     }
 }
 
+const validarAvaliação = (req,res,next) => {
+    const {error} = avaliaçãoEsquema.validate(req.body);
+    if(error) {
+        const msg = error.details.map((item) => item.message).join(",");
+        return next(new AppErros(msg, 400));
+    } else {
+        next();
+    }
+}
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -129,7 +138,7 @@ app.delete("/parques/:id", async (req, res) => {
     res.render("parques/apagar");
 })
 
-app.post("/parques/:id/avaliacao", async (req, res) => {
+app.post("/parques/:id/avaliacao", validarAvaliação, async (req, res) => {
     const { id } = req.params;
     const parque = await Parque.findById(id);
     const avaliação = new Avaliação(req.body);
