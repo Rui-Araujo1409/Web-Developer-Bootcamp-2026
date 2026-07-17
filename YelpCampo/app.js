@@ -88,7 +88,7 @@ app.get("/parques", async (req, res) => {
 
 app.get("/parques/:id", async (req, res, next) => {
     const id = req.params.id
-    const parque = await Parque.findById(id);
+    const parque = await Parque.findById(id).populate("avaliações");
     if (!parque) { next(new AppErros("Parque não existe", 404)); };
     res.render("parques/detalhe", { parque });
 })
@@ -145,6 +145,16 @@ app.post("/parques/:id/avaliacao", validarAvaliação, async (req, res) => {
     parque.avaliações.push(avaliação);
     await avaliação.save();
     await parque.save();
+    res.redirect(`/parques/${id}`);
+})
+
+app.delete("/parques/:id/avaliacao/:avaliacaoId", async (req,res) => {
+    //para usar dois IDs no url tem que se dar nomes diferentes
+    const {id, avaliacaoId} = req.params;
+    //o operador $pull retira de um array o(s) valor(es) que satisfaçam uma condição
+    //neste caso vai ao array da propriedade "avaliações" e retira a instância com o avaliacaoId
+    await Parque.findByIdAndUpdate(id, {$pull:{avaliações: avaliacaoId}}); 
+    await Avaliação.findByIdAndDelete(avaliacaoId); 
     res.redirect(`/parques/${id}`);
 })
 

@@ -1,6 +1,6 @@
 <% layout("layouts/boilerplate") %>
         <div class="row justify-content-center">
-                <div class="col-md-8 offset-md-2">
+                <div class="col-md-6">
                         <section class="card p-2 text-center mb-3">
                                 <img src="<%=parque.imagem%>" alt="imagem do parque" class="img-fluid card-img-top">
                                 <div class="card-body">
@@ -31,7 +31,11 @@
                                         <a href="/parques" class="btn btn-secondary card-link">Lista dos parques</a>
                                 </section>
                         </section>
-                        <h2>Deixe aqui a sua avaliação</h2>
+                    
+
+                </div>
+                <section class="col-md-6">
+                            <h2>Deixe aqui a sua avaliação</h2>
                         <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate class="validar">
                                 <section class="mb-3">
                                         <label for="pontuação" class="form-label">Insira a sua pontuação de 1 (pior) a 5
@@ -53,7 +57,23 @@
                                 </section>
                                 <button class="btn btn-success mb-3">Submeter</button>
                         </form>
-                </div>
+                        <hr>
+                        <h2>Avaliações</h2>
+                        <% for(avaliação of parque.avaliações) { %>
+                                <section class="card mb-3">
+                                        <section class=" card-body p-2">
+                                                <p class="card-text">
+                                                        <%= avaliação.avaliação %>
+                                                </p>
+                                                <h5 class="card-title">Pontuação: <%= avaliação.pontuação %>
+                                                </h5>
+                                        </section>
+                                        <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE" method="post" class="p-2">
+                                                <button class="btn btn-danger btn-sm">Apagar</button>
+                                        </form>
+                                </section>
+                                <% } %>
+                </section>
         </div>
         </div>
 
