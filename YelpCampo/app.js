@@ -11,6 +11,7 @@ const AppErros = require("./utils/appErros");
 const Joi = require("joi"); //
 const { parqueEsquema, avaliaçãoEsquema } = require("./esquemaJoi.js");
 const Avaliação = require("./modelos/avaliações.js");
+const sessão = require("express-session");
 
 //rotas
 const rotaParques = require("./rotas/parques.js");
@@ -49,7 +50,13 @@ app.set("view engine", "ejs");
 morgan("tiny");
 //middleware para servir os items estáticos
 app.use(express.static(path.join(__dirname, "public")));
+const sessãoConfig = {
+    secret: "nikita",
+    resave: false,
+    saveUninitialized: true,
+}
 
+app.use(sessão(sessãoConfig));
 
 app.get("/", (req, res) => {
     res.render("home");
