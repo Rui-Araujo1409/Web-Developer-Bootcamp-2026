@@ -47,7 +47,7 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 morgan("tiny");
-//middleware para servir os bens estáticos
+//middleware para servir os items estáticos
 app.use(express.static(path.join(__dirname, "public")));
 
 
