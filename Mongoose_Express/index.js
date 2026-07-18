@@ -4,6 +4,8 @@ const methodOverride = require("method-override");
 const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+const flash = require("connect-flash");
+const sessão = require("express-session");
 
 const Produto = require("./Modelos/produto");
 const Quinta = require("./Modelos/quinta");
@@ -27,6 +29,16 @@ app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+//sessões e flash
+app.use(sessão({secret: "nikita", resave: false, saveUninitialized: false}));
+app.use(flash());
+
+//middleware do Flash
+app.use((req,res,next) => {
+    res.locals.mensagens = req.flash("sucesso");
+    next();
+})
+
 //este array serve par criar dinâmicamente as opções das categorias
 //no html da view novo
 const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
@@ -34,7 +46,7 @@ const categorias = ["fruta", "vegetais", "lacticínios", "frutos secos"];
 //ROTAS PARA AS QUINTAS
 app.get("/quintas", async (req, res) => {
     const quintas = await Quinta.find({});
-    res.render("quintas/index", { quintas })
+    res.render("quintas/index", { quintas }) 
 })
 
 app.delete("/quintas/:id", async (req,res) => {
@@ -50,6 +62,8 @@ app.get("/quintas/nova", (req, res) => {
 app.post("/quintas", async (req, res) => {
     const novaQuinta = new Quinta(req.body);
     await novaQuinta.save();
+    //criamos a mensagem Flash antes do redirecionamento
+    req.flash("sucesso", "A quinta foi criada com sucesso!")
     res.redirect(`/quintas/${novaQuinta._id}`);
 })
 
@@ -58,7 +72,7 @@ app.get("/quintas/:id", async (req, res) => {
     //const quinta = await Quinta.findById(id);
     //para popular os produtos temos de acrescentar .populate("produtos")
     const quinta = await Quinta.findById(id).populate("produtos");
-    res.render("quintas/detalhe", { quinta });
+    res.render("quintas/detalhe", { quinta });//, mensagens: req.flash("sucesso")}); //mensagens do FLash incluídas, melhor forma é usar um middleware com res.locals
 })
 
 //rota para apresentar um formulário para inserir um produto associado a uma quinta
