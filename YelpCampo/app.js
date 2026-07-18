@@ -12,11 +12,13 @@ const Joi = require("joi"); //
 const { parqueEsquema, avaliaçãoEsquema } = require("./esquemaJoi.js");
 const Avaliação = require("./modelos/avaliações.js");
 const sessão = require("express-session");
+const flash = require("connect-flash");
 
-//rotas
+//importar rotas
 const rotaParques = require("./rotas/parques.js");
 const rotaAvaliação = require("./rotas/avaliação.js");
 
+//CONEXÂO ao MONGODB
 const conectarMongoBD = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
@@ -29,7 +31,7 @@ const conectarMongoBD = async () => {
 }
 
 //este bloco não aparece na secção do Mongoose do curso
-//parece servir apra ouvir eventos na ligação e lidar com erros
+//parece servir para ouvir eventos na ligação e lidar com erros
 //será que a fx anterior chega?
 const db = mongoose.connection;
 db.on("erro", console.error.bind(console, "erro de conexão:"));
@@ -37,27 +39,43 @@ db.once("aberta", () => {
     console.log("BD conectada");
 })
 
-
-
 conectarMongoBD();
 
+//MIDDLEWARE
 app.engine("ejs", engine);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(flash());
 morgan("tiny");
-//middleware para servir os items estáticos
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); //middleware para servir os items estáticos
+
+///Sessão
 const sessãoConfig = {
     secret: "nikita",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60* 24 * 7,
+        maxAge: 1000 * 60 * 60* 24 * 7,
+    }
 }
 
 app.use(sessão(sessãoConfig));
 
+///Flash
+//middleware do Flash
+app.use((req,res,next) => {
+    res.locals.sucesso = req.flash("sucesso");
+    res.locals.erro = req.flash("erro");
+    next();
+})
+
+
+//ROTAS
 app.get("/", (req, res) => {
     res.render("home");
 })
@@ -67,7 +85,7 @@ app.use("/parques", rotaParques);
 //rotas avaliação
 app.use("/parques", rotaAvaliação);
 
-
+//Middleware para os erros
 app.all("/{*path}", (req, res, next) => {
     next(new AppErros("Página não encontrada", 404));
 })
@@ -78,5 +96,5 @@ app.use((err, req, res, next) => {
 })
 
 
-
+//Abrir servidor
 app.listen(3000, () => console.log("Conectado na porta 3000"));

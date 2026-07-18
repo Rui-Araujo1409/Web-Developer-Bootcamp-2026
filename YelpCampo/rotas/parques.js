@@ -32,20 +32,15 @@ const validarParque = (req, res, next) => {
 }
 
 //as rotas estáticas têm de ser colocadas antes das dinâmicas
-rota.get("/novo", (req, res) => {
-    res.render("parques/novo");
-})
 
+///rotas estáticas
 rota.get("/", async (req, res) => {
     const parques = await Parque.find({});
     res.render("parques/index", { parques });
 })
 
-rota.get("/:id", async (req, res, next) => {
-    const id = req.params.id
-    const parque = await Parque.findById(id).populate("avaliações");
-    if (!parque) { next(new AppErros("Parque não existe", 404)); };
-    res.render("parques/detalhe", { parque });
+rota.get("/novo", (req, res) => {
+    res.render("parques/novo");
 })
 
 rota.post("/", validarParque, async (req, res, next) => {
@@ -66,20 +61,45 @@ rota.post("/", validarParque, async (req, res, next) => {
          const msg = error.details.map((item) => item.message).join(",");
         return next(new AppErros(msg, 400));
      }  */
+
     const novoParque = new Parque(req.body);
     await novoParque.save();
+    req.flash("sucesso", "Campo criado com sucesso!");
+    req.flash("erro", "Parece que houve um erro...");
     res.redirect(`/parques/${novoParque._id}`);
 })
+
+
+//rotas dinâmicas
+rota.get("/:id", async (req, res, next) => {
+    const id = req.params.id
+    const {sucesso, erro} = req.flash;
+    const parque = await Parque.findById(id).populate("avaliações");
+    //if (!parque) { next(new AppErros("Parque não existe", 404)); };
+    //o mesmo mas com Flash
+    if (!parque) { 
+        req.flash("erro", "O parque não existe");
+        return res.redirect("/parques");
+     };
+    res.render("parques/detalhe", { parque });
+})
+
+
 
 rota.get("/:id/editar", async (req, res) => {
     const id = req.params.id;
     const parqueActual = await Parque.findById(id);
+    if (!parqueActual) { 
+        req.flash("erro", "O parque não existe");
+        return res.redirect("/parques");
+     };
     res.render("parques/editar", { parqueActual });
 })
 
 rota.put("/:id", validarParque, async (req, res) => {
     const id = req.params.id;
     const parqueEditado = await Parque.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
+    req.flash("sucesso", "Campo actualizado com sucesso!");
     res.redirect(`/parques/${parqueEditado._id}`);
 })
 

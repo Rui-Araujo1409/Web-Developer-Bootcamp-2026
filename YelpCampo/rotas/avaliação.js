@@ -25,6 +25,7 @@ rota.post("/:id/avaliacao", validarAvaliação, async (req, res) => {
     parque.avaliações.push(avaliação);
     await avaliação.save();
     await parque.save();
+    req.flash("sucesso", "A avalição foi submetida com sucesso");
     res.redirect(`/parques/${id}`);
 })
 
@@ -34,7 +35,8 @@ rota.delete("/:id/avaliacao/:avaliacaoId", async (req,res) => {
     //o operador $pull retira de um array o(s) valor(es) que satisfaçam uma condição
     //neste caso vai ao array da propriedade "avaliações" e retira a instância com o avaliacaoId
     await Parque.findByIdAndUpdate(id, {$pull:{avaliações: avaliacaoId}}); 
-    await Avaliação.findByIdAndDelete(avaliacaoId); 
+    await Avaliação.findByIdAndDelete(avaliacaoId);
+    req.flash("sucesso", "A avaliação foi apagada.");
     res.redirect(`/parques/${id}`);
 })
 
