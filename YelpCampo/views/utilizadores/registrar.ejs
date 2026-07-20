@@ -1,0 +1,34 @@
+<% layout("layouts/boilerplate") %>
+<div class="row">
+    <h1 class="text-center mb-3">Criar utilizador</h1>
+     <div class="col-6 offset-3">
+            <form action="/utilizador/registrar" method="post" novalidate class="validar mb-3">
+                <section class="mb-3">
+                    <label for="utilizador" class="form-label">Nome do utilizador: </label>
+                    <input type="text" name="utilizador" id="utilizador" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Tem de inserir um nome.
+                    </div>
+                </section>
+                <section class="mb-3">
+                    <label for="email" class="form-label me-1">Email: </label>
+                    <div class="input-group">
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                        <div class="invalid-feedback">
+                            Tem de inserir um email válido.
+                        </div>
+                </section>
+                <section class="mb-3">
+                    <label for="password" class="form-label">Insira uma palavra-passe: </label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Tem de inserir uma palavra-passe.
+                    </div>
+                </section>
+
+                <button class="btn btn-success me-3">Criar</button>
+                <a href="/"
+                    class="btn btn-danger">Cancelar</a>
+            </form>
+   </div>

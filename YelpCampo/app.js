@@ -15,11 +15,13 @@ const sessão = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const passportLocal = require("passport-local");
-const Utilizador = require("./modelos/utilizador.js")
+const Utilizador = require("./modelos/utilizador.js");
+
 
 //importar rotas
 const rotaParques = require("./rotas/parques.js");
 const rotaAvaliação = require("./rotas/avaliação.js");
+const rotaUtilizador = require("./rotas/utilizador.js");
 
 //CONEXÂO ao MONGODB
 const conectarMongoBD = async () => {
@@ -93,19 +95,21 @@ app.get("/", (req, res) => {
     res.render("home");
 })
 
-app.use("/criarutilizador", async (req,res) => {
+/* app.use("/criarutilizador", async (req,res) => {
     //criar utilizador, com email e um username (que não está no esquema base, mas no passportLocal)
     const utilizador = new Utilizador({email: "nada@gmail.com", username : "rui"}); //tem que ser username!!
     //agora vou usar o método register para criar uma pass encriptada para esse utilizador
     const novoUtilizador = await Utilizador.register(utilizador, "nikita");
     //ver o que dá?
     res.send(novoUtilizador);
-})
+}) */
 
 //Rerouting das rotas parques
 app.use("/parques", rotaParques);
 //Rerouting das rotas avaliação
 app.use("/parques", rotaAvaliação);
+//Rerouting das rotas utilizadores
+app.use("/utilizador", rotaUtilizador);
 
 //Middleware para os erros
 app.all("/{*path}", (req, res, next) => {
