@@ -19,7 +19,7 @@ rota.post("/registrar", async (req, res) => {
         req.flash("sucesso", "Bemvindo ao YelpCampo!");
         res.redirect("/parques");
     } catch (e) {
-        req.flash("erro", e.message) //o flash vai mostrar a mensagem que vem com o obj erro
+        req.flash("error", e.message) //o flash vai mostrar a mensagem que vem com o obj erro
         //redireccionar para o registro
         res.redirect("/utilizador/registrar");
     }
@@ -39,5 +39,17 @@ rota.post("/entrar", passport.authenticate("local", {
     res.redirect("/");
 })
 
+rota.get("/sair", (req, res, next) => {
+    //a versão do video (540 Adding logout) só usa o logout();
+    //mas houve alterações no Passport e agora tem que haver um callback
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash("sucesso", "Até à próxima.");
+        res.redirect("/parques");
+    })
+
+})
 
 module.exports = rota;

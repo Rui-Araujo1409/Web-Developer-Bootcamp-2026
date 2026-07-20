@@ -71,13 +71,8 @@ const sessãoConfig = {
 
 app.use(sessão(sessãoConfig));
 
-///Flash
-//middleware do Flash
-app.use((req,res,next) => {
-    res.locals.sucesso = req.flash("sucesso");
-    res.locals.erro = req.flash("erro");
-    next();
-})
+
+
 
 ///PASSPORT (tem que estar depois do middleware da sessão)
 app.use(passport.initialize()); //para injectar o passport dentro do obj req, sem isto o resto não funciona
@@ -89,11 +84,17 @@ passport.use(new passportLocal(Utilizador.authenticate()));
 passport.serializeUser(Utilizador.serializeUser()); //para guardar um user na sessão, os métodos são do passport-local-mongoose (não do passport, mas dá confusão...)
 passport.deserializeUser(Utilizador.deserializeUser()); //para retirar um user da sessão
 
+///Flash
+//middleware do Flash e Passport
+app.use((req,res,next) => {
+    res.locals.utilizadorCorrente = req.user;
+    res.locals.sucesso = req.flash("sucesso");
+    res.locals.error = req.flash("error"); //aqui tem de ser error por causa do flash do Passport authenticate, com "erro" a mensagem não aparece
+    next();
+})
 
 //ROTAS
-app.get("/", (req, res) => {
-    res.render("home");
-})
+
 
 /* app.use("/criarutilizador", async (req,res) => {
     //criar utilizador, com email e um username (que não está no esquema base, mas no passportLocal)
@@ -110,6 +111,10 @@ app.use("/parques", rotaParques);
 app.use("/parques", rotaAvaliação);
 //Rerouting das rotas utilizadores
 app.use("/utilizador", rotaUtilizador);
+
+app.get("/", (req, res) => {
+    res.render("home");
+})
 
 //Middleware para os erros
 app.all("/{*path}", (req, res, next) => {
