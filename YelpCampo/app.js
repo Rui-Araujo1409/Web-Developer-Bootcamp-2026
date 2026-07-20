@@ -13,6 +13,9 @@ const { parqueEsquema, avaliaçãoEsquema } = require("./esquemaJoi.js");
 const Avaliação = require("./modelos/avaliações.js");
 const sessão = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const passportLocal = require("passport-local");
+const Utilizador = require("./modelos/utilizador.js")
 
 //importar rotas
 const rotaParques = require("./rotas/parques.js");
@@ -74,15 +77,34 @@ app.use((req,res,next) => {
     next();
 })
 
+///PASSPORT (tem que estar depois do middleware da sessão)
+app.use(passport.initialize()); //para injectar o passport dentro do obj req, sem isto o resto não funciona
+app.use(passport.session()); //para usar a estratégia com sessões com login persistentes (para não obrigar o utilizador a ter de fazer logins constantes)
+//vamos dizer ao passport para usar a estratégia local com o modelo que criamos
+//sendo que o método authenticate() vem com o passport-local-mongoose
+passport.use(new passportLocal(Utilizador.authenticate()));
+//agora vamos dizer ao passport para usar o username nas sessões
+passport.serializeUser(Utilizador.serializeUser()); //para guardar um user na sessão, os métodos são do passport-local-mongoose (não do passport, mas dá confusão...)
+passport.deserializeUser(Utilizador.deserializeUser()); //para retirar um user da sessão
+
 
 //ROTAS
 app.get("/", (req, res) => {
     res.render("home");
 })
 
-//rotas parques
+app.use("/criarutilizador", async (req,res) => {
+    //criar utilizador, com email e um username (que não está no esquema base, mas no passportLocal)
+    const utilizador = new Utilizador({email: "nada@gmail.com", username : "rui"}); //tem que ser username!!
+    //agora vou usar o método register para criar uma pass encriptada para esse utilizador
+    const novoUtilizador = await Utilizador.register(utilizador, "nikita");
+    //ver o que dá?
+    res.send(novoUtilizador);
+})
+
+//Rerouting das rotas parques
 app.use("/parques", rotaParques);
-//rotas avaliação
+//Rerouting das rotas avaliação
 app.use("/parques", rotaAvaliação);
 
 //Middleware para os erros
