@@ -89,7 +89,7 @@ passport.deserializeUser(Utilizador.deserializeUser()); //para retirar um user d
 app.use((req,res,next) => {
     res.locals.utilizadorCorrente = req.user;
     res.locals.sucesso = req.flash("sucesso");
-    res.locals.error = req.flash("error"); //aqui tem de ser error por causa do flash do Passport authenticate, com "erro" a mensagem não aparece
+    res.locals.error = req.flash("error"); //aqui tem de ser "error" por causa do flashFailure do passport.authenticate, com "erro" a mensagem não aparece
     next();
 })
 
