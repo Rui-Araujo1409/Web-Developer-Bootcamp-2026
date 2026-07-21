@@ -8,7 +8,9 @@ const { estáLogado } = require("../middleware.js");
 const {validarParque, verificarAutor} = require("../middleware.js");
 //importar o multer para lidar com upload de ficheiros pelo formulário
 const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' });
+//importar o módulo com o armazenamento cloudinary
+const {storage} = require("../cloudinary/index.js")
+const upload = multer({storage})     //a versão de teste era com armazenamento local ({ dest: 'uploads/' });
 //importar os controladores
 const parques = require("../controladores/parques.js");
 
@@ -22,7 +24,7 @@ rota.route("/")
 .get(parques.índice)
 //.post(estáLogado, validarParque, parques.criarParque);
 .post(upload.single("imagem"), (req,res) => {
-    res.send(req.body, req.file);
+    console.log(req.body, req.file);
 })
 
 rota.get("/novo", estáLogado, parques.novoFormCriarParque);

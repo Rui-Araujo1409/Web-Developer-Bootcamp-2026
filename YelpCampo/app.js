@@ -1,7 +1,10 @@
+//if para usar o .dotenv em dev
+if(process.env.NODE_ENV !== "production") {
+    const dotenv = require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config();
 const methodOverride = require("method-override");
 const path = require("path");
 const morgan = require("morgan");
@@ -16,6 +19,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const passportLocal = require("passport-local");
 const Utilizador = require("./modelos/utilizador.js");
+
 
 
 //importar rotas
