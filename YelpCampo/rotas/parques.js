@@ -21,6 +21,9 @@ const parques = require("../controladores/parques.js");
 rota.route("/")
 .get(parques.índice)
 //.post(estáLogado, validarParque, parques.criarParque);
+.post(upload.single("imagem"), (req,res) => {
+    res.send(req.body, req.file);
+})
 
 rota.get("/novo", estáLogado, parques.novoFormCriarParque);
 
