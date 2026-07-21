@@ -5,23 +5,15 @@ const Avaliação = require("../modelos/avaliações");
 const Parque = require("../modelos/parque");
 //importar Esquema Joi
 const { avaliaçãoEsquema } = require("../esquemaJoi.js");
+const {validarAvaliação, estáLogado, verificarAutorAvaliação} = require("../middleware.js");
 
 
-
-const validarAvaliação = (req,res,next) => {
-    const {error} = avaliaçãoEsquema.validate(req.body);
-    if(error) {
-        const msg = error.details.map((item) => item.message).join(",");
-        return next(new AppErros(msg, 400));
-    } else {
-        next();
-    }
-}
-
-rota.post("/:id/avaliacao", validarAvaliação, async (req, res) => {
+rota.post("/:id/avaliacao", estáLogado, validarAvaliação, async (req, res) => {
     const { id } = req.params;
     const parque = await Parque.findById(id);
     const avaliação = new Avaliação(req.body);
+    //inserir o autor 
+    avaliação.autor = req.user._id;
     parque.avaliações.push(avaliação);
     await avaliação.save();
     await parque.save();
@@ -29,7 +21,7 @@ rota.post("/:id/avaliacao", validarAvaliação, async (req, res) => {
     res.redirect(`/parques/${id}`);
 })
 
-rota.delete("/:id/avaliacao/:avaliacaoId", async (req,res) => {
+rota.delete("/:id/avaliacao/:avaliacaoId", estáLogado, verificarAutorAvaliação, async (req,res) => {
     //para usar dois IDs no url tem que se dar nomes diferentes
     const {id, avaliacaoId} = req.params;
     //o operador $pull retira de um array o(s) valor(es) que satisfaçam uma condição

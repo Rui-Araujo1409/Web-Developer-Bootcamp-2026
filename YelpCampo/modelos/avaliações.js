@@ -8,7 +8,11 @@ const avaliaçõesSchema = new Schema({
         min: 1,
         max: 5
     },
-    avaliação: String
+    avaliação: String,
+    autor: {
+        type: Schema.Types.ObjectId,
+        ref: "Utilizadore"
+    }
 })
 
 

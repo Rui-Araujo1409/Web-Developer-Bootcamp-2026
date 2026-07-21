@@ -3,37 +3,11 @@ const rota = express.Router();
 const passport = require("passport");
 //tem que se importar o modelo
 const Parque = require("../modelos/parque");
-//e importar o util erros
-const AppErros = require("../utils/appErros");
-//importar Esquema Joi
-const { parqueEsquema } = require("../esquemaJoi.js");
 //importar o middleware do verficar o login
 const { estáLogado } = require("../middleware.js");
-const parque = require("../modelos/parque");
+const {validarParque, verificarAutor} = require("../middleware.js");
 
 
-//fx para a validação, aqui tem de se acrescentar o next() para o fluxo continuar
-const validarParque = (req, res, next) => {
-    {
-        //depois passamos o esquema para o seu próprio ficheiro
-        /*   const parqueEsquema = Joi.object({
-          título: Joi.string().required(),
-          localização: Joi.string().required(),
-          preço: Joi.number().required().min(10),
-          imagem: Joi.string().required(),
-          descrição: Joi.string().required()
-      }) */
-        //retirar o obj error da validação
-        const { error } = parqueEsquema.validate(req.body);
-        if (error) {
-            //o retorno de error.details é um array, constroi-se uma string com o retorno
-            const msg = error.details.map((item) => item.message).join(",");
-            return next(new AppErros(msg, 400));
-        } else {
-            next();
-        }
-    }
-}
 
 //as rotas estáticas têm de ser colocadas antes das dinâmicas
 
@@ -85,7 +59,12 @@ rota.post("/", estáLogado, validarParque, async (req, res, next) => {
 rota.get("/:id", async (req, res, next) => {
     const id = req.params.id
     const { sucesso, error } = req.flash;
-    const parque = await Parque.findById(id).populate("avaliações").populate("autor"); //para popular propriedades basta encadear o populate
+    const parque = await Parque.findById(id).populate({
+        path: "avaliações", //aqui é mais complicado, estamos a popular no parque o campo "avaliações",
+        populate:{          //agora queremos dentro das "avaliações" popular o campo "autor"
+            path: "autor"   //e no populate seguinte é para o campo autor mas do parque
+        } 
+    }).populate("autor"); //para popular propriedades basta encadear o populate
     //if (!parque) { next(new AppErros("Parque não existe", 404)); };
     //o mesmo mas com Flash
     if (!parque) {
@@ -97,7 +76,7 @@ rota.get("/:id", async (req, res, next) => {
 
 
 
-rota.get("/:id/editar", estáLogado, async (req, res) => {
+rota.get("/:id/editar", estáLogado, verificarAutor, async (req, res) => {
     const id = req.params.id;
     const parqueActual = await Parque.findById(id);
     if (!parqueActual) {
@@ -107,22 +86,22 @@ rota.get("/:id/editar", estáLogado, async (req, res) => {
     res.render("parques/editar", { parqueActual });
 })
 
-rota.put("/:id", estáLogado, validarParque, async (req, res) => {
+rota.put("/:id", estáLogado, validarParque, verificarAutor, async (req, res) => {
     const id = req.params.id;
-    //alteração para introduzir permissões que protejam a rota
+    //alteração para introduzir permissões que protejam a rota (depois este código vai para um middleware)
     //primeiro encontrar o parque
-    const parqueEditar = await Parque.findById(id);
-    //lógica para confirmar se o dono do parque é o que está logado
-    if (!parqueEditar.autor.equals(req.user._id)) {
-        req.flash("error", "Não tem permissões para tal.");
-        return res.redirect(`/parques/${id}`);
-    }
+    /*     const parqueEditar = await Parque.findById(id);
+        //lógica para confirmar se o dono do parque é o que está logado
+        if (!parqueEditar.autor.equals(req.user._id)) {
+            req.flash("error", "Não tem permissões para tal.");
+            return res.redirect(`/parques/${id}`);
+        } */
     const parqueEditado = await Parque.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
     req.flash("sucesso", "Campo actualizado com sucesso!");
     res.redirect(`/parques/${parqueEditado._id}`);
 })
 
-rota.delete("/:id", estáLogado, async (req, res) => {
+rota.delete("/:id", estáLogado, verificarAutor,  async (req, res) => {
     const id = req.params.id;
     const parqueEliminar = await Parque.findByIdAndDelete(id);
     res.render("parques/apagar");
