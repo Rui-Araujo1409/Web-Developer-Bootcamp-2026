@@ -46,15 +46,31 @@
                 </div>
                 <section class="col-md-6">
                         <% if (utilizadorCorrente) { %>
-                                <h2>Deixe aqui a sua avaliação</h2>
+                                <!-- <h2>Deixe aqui a sua avaliação</h2> -->
                                 <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate
                                         class="validar">
                                         <section class="mb-3">
-                                                <label for="pontuação" class="form-label">Insira a sua pontuação de 1
+                                             <!--    <label for="pontuação" class="form-label">Insira a sua pontuação de 1
                                                         (pior) a 5
                                                         (melhor)</label>
                                                 <input type="range" name="pontuação" id="pontuação" min="1" max="5"
-                                                        class="form-control form-range" required>
+                                                        class="form-control form-range" required> -->
+                                                <fieldset class="starability-basic">
+                                                        <legend>Avaliação:</legend>
+                                                        <input type="radio" id="no-rate" class="input-no-rate"
+                                                                name="pontuação" value="0" checked
+                                                                aria-label="No rating." />
+                                                        <input type="radio" id="first-rate1" name="pontuação" value="1" />
+                                                        <label for="first-rate1" title="Terrible">1 star</label>
+                                                        <input type="radio" id="first-rate2" name="pontuação" value="2" />
+                                                        <label for="first-rate2" title="Not good">2 stars</label>
+                                                        <input type="radio" id="first-rate3" name="pontuação" value="3" />
+                                                        <label for="first-rate3" title="Average">3 stars</label>
+                                                        <input type="radio" id="first-rate4" name="pontuação" value="4" />
+                                                        <label for="first-rate4" title="Very good">4 stars</label>
+                                                        <input type="radio" id="first-rate5" name="pontuação" value="5" />
+                                                        <label for="first-rate5" title="Amazing">5 stars</label>
+                                                </fieldset>
 
                                         </section>
                                         <section class="my-3">
@@ -79,11 +95,12 @@
                                                                 <p class="card-text">
                                                                         <%= avaliação.avaliação %>
                                                                 </p>
-                                                            <!--     <h5 class="card-title">Pontuação: <%=
+                                                                <!--     <h5 class="card-title">Pontuação: <%=
                                                                                 avaliação.pontuação %>
                                                                 </h5> -->
-                                                                <h3>Avaliação</h3>
-                                                                <p class="starability-result" data-rating="<%= avaliação.pontuação %>">
+                                                                <!-- <h3>Avaliação</h3> -->
+                                                                <p class="starability-result"
+                                                                        data-rating="<%= avaliação.pontuação %>">
                                                                         Avaliação: 3 <%= avaliação.pontuação %>
                                                                 </p>
                                                                 <% if (avaliação.autor.username) { %>
