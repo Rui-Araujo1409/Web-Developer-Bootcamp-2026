@@ -1,4 +1,8 @@
 <% layout("layouts/boilerplate") %>
+        <link rel="stylesheet" href="/stylesheets/estrelas.css">
+
+
+
         <div class="row justify-content-center">
                 <div class="col-md-6">
                         <section class="card p-2 text-center mb-3">
@@ -75,16 +79,21 @@
                                                                 <p class="card-text">
                                                                         <%= avaliação.avaliação %>
                                                                 </p>
-                                                                <h5 class="card-title">Pontuação: <%=
+                                                            <!--     <h5 class="card-title">Pontuação: <%=
                                                                                 avaliação.pontuação %>
-                                                                </h5>
+                                                                </h5> -->
+                                                                <h3>Avaliação</h3>
+                                                                <p class="starability-result" data-rating="<%= avaliação.pontuação %>">
+                                                                        Avaliação: 3 <%= avaliação.pontuação %>
+                                                                </p>
                                                                 <% if (avaliação.autor.username) { %>
                                                                         <p class="card-subtitle  text-muted">Autor: <%=
                                                                                         avaliação.autor.username%>
                                                                         </p>
                                                                         <% } %>
                                                         </section>
-                                                        <% if (utilizadorCorrente && avaliação.autor.equals(utilizadorCorrente._id)) { %>
+                                                        <% if (utilizadorCorrente &&
+                                                                avaliação.autor.equals(utilizadorCorrente._id)) { %>
                                                                 <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE"
                                                                         method="post" class="p-2">
                                                                         <button
