@@ -6,9 +6,6 @@ const { guardarUrlOriginal } = require("../middleware.js");
 const utilizadores = require("../controladores/utilizadores.js");
 
 //rotas para criar o utilizador
-
-
-
 rota.route("/registrar")
 .get(utilizadores.formNovoUtilizador)
 .post(utilizadores.criarNovoUtilizador);
