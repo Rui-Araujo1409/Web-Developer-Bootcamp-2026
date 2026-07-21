@@ -18,9 +18,13 @@
                                         <li class="list-group-item">
                                                 <%= parque.preço %>€/noite
                                         </li>
+                                        <li class="list-group-item">
+                                                Criado por: <%= parque.autor.username %>
+                                        </li>
                                 </ul>
 
                                 <section class="card-body">
+                                        <% if(utilizadorCorrente && parque.autor.equals(utilizadorCorrente._id)) {%>
                                         <a href="/parques/<%=parque._id%>/editar"
                                                 class="btn btn-info card-link">Editar</a>
                                         <form action="/parques/<%=parque._id%>?_method=DELETE" method="post"
@@ -28,14 +32,15 @@
                                                 <button class="btn btn-danger my-3">Apagar</button>
 
                                         </form>
+                                        <% } %>
                                         <a href="/parques" class="btn btn-secondary card-link">Lista dos parques</a>
                                 </section>
                         </section>
-                    
+
 
                 </div>
                 <section class="col-md-6">
-                            <h2>Deixe aqui a sua avaliação</h2>
+                        <h2>Deixe aqui a sua avaliação</h2>
                         <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate class="validar">
                                 <section class="mb-3">
                                         <label for="pontuação" class="form-label">Insira a sua pontuação de 1 (pior) a 5
@@ -68,7 +73,8 @@
                                                 <h5 class="card-title">Pontuação: <%= avaliação.pontuação %>
                                                 </h5>
                                         </section>
-                                        <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE" method="post" class="p-2">
+                                        <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE"
+                                                method="post" class="p-2">
                                                 <button class="btn btn-danger btn-sm">Apagar</button>
                                         </form>
                                 </section>

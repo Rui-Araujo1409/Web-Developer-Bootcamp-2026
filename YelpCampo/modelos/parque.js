@@ -11,6 +11,12 @@ const ParqueSchema = new Schema({
     },
     descrição: String,
     localização: String,
+    //esta propriedade é para apresentar quem criou o parque
+    autor: {
+        type: Schema.Types.ObjectId,
+        //cuidado aqui, tem de ser "Utilizadore", o outro modelo "Utilizador" deixou de se usar
+        ref: "Utilizadore"
+    },
     avaliações: [{
         type: Schema.Types.ObjectId,
         ref: "Avaliação"

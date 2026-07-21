@@ -23,6 +23,7 @@ const seedBD = async () => {
             const preço = Math.floor(Math.random() * 50) + 10;
             const aleatório = Math.floor(Math.random() * 1000);
             const parque = new Parque({
+                autor: '6a5e28a351db71c79cb4d358',
                 localização: `${cidades[aleatório].city}, ${cidades[aleatório].state}`,
                 título: `${amostra(descriptores)} ${amostra(sítios)}`,
                 imagem: `https://picsum.photos/400?random=${Math.random()}`,
