@@ -3,7 +3,8 @@
     <div class="row">
         <h1 class="text-center mb-3">Novo Parque</h1>
         <div class="col-6 offset-3">
-            <form action="/parques" method="post" novalidate class="validar mb-3">
+            <!-- o enctype="multipart/form-data" serve para o formulário enviar ficheiros -->
+            <form action="/parques" method="post" novalidate class="validar mb-3" enctype="multipart/form-data">
                 <section class="mb-3">
                     <label for="título" class="form-label">Nome do parque: </label>
                     <input type="text" name="título" id="título" class="form-control" required>
@@ -50,8 +51,10 @@
                     </div>
                 </section>
                 <section class="mb-3">
-                    <label for="imagem" class="form-label">Insira um URL de uma imagem do parque:</label>
-                    <input type="text" name="imagem" id="imagem" cols="50" rows="10" class="form-control" required>
+            <!--         <label for="imagem" class="form-label">Insira um URL de uma imagem do parque:</label>
+                    <input type="text" name="imagem" id="imagem" cols="50" rows="10" class="form-control" required> -->
+                    <label for="imagem" class="form-label">Insira uma imagem</label>
+                    <input type="file" name="imagem" id="imagem" class="form-control" required>
                     <div class="valid-feedback">
                         Obrigado.
                     </div>

@@ -6,6 +6,9 @@ const Parque = require("../modelos/parque");
 //importar o middleware do verficar o login
 const { estáLogado } = require("../middleware.js");
 const {validarParque, verificarAutor} = require("../middleware.js");
+//importar o multer para lidar com upload de ficheiros pelo formulário
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
 //importar os controladores
 const parques = require("../controladores/parques.js");
 
@@ -17,7 +20,7 @@ const parques = require("../controladores/parques.js");
 
 rota.route("/")
 .get(parques.índice)
-.post(estáLogado, validarParque, parques.criarParque);
+//.post(estáLogado, validarParque, parques.criarParque);
 
 rota.get("/novo", estáLogado, parques.novoFormCriarParque);
 
