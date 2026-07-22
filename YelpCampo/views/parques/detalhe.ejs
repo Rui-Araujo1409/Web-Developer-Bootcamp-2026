@@ -1,175 +1,173 @@
 <% layout("layouts/boilerplate") %>
-        <link rel="stylesheet" href="/stylesheets/estrelas.css">
+<link rel="stylesheet" href="/stylesheets/estrelas.css">
 
 
-
-        <div class="row justify-content-center">
-                <div class="col-md-6">
-                        <div id="carouselExample" class="carousel slide">
-                                <div class="carousel-inner">
-                                        <!-- O forEach é para dar à primeira imagem do array a classe de "active" -->
-                                        <% parque.imagens.forEach((img, index)=> {%>
-                                                <div class="carousel-item <%= index === 0 ? " active" : "" %>">
-                                                        <img src="<%=img.url%>" class="d-block w-100"
-                                                                alt="imagem do parque">
-                                                </div>
-                                                <% }) %>
+<div class="row justify-content-center">
+        <div class="col-md-6">
+                <div id="map" style="width: 400px; height: 400px;"></div>
+                <div id="carouselParque" class="carousel slide">
+                        <div class="carousel-inner">
+                                <!-- O forEach é para dar à primeira imagem do array a classe de "active" -->
+                                <% parque.imagens.forEach((img, index)=> {%>
+                                <div class="carousel-item <%= index === 0 ? " active" : "" %>">
+                                        <img src="<%=img.url%>" class="d-block w-100" alt="imagem do parque">
                                 </div>
-                                <!-- Para esconder os botões de controlo se o parque tiver apenas 1 imagem -->
-                                <% if (parque.imagens.length > 1) { %>
-                                        <button class="carousel-control-prev" type="button"
-                                                data-bs-target="#carouselExample" data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button"
-                                                data-bs-target="#carouselExample" data-bs-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Next</span>
-                                        </button>
-                                        <% } %>
+                                <% }) %>
                         </div>
-                        <section class="card p-2 text-center mb-3">
-
-                                <div class="card-body">
-                                        <h5 class="card-title mt-2">
-                                                <%= parque.título %>
-                                        </h5>
-                                        <p class="card-text">
-                                                <%= parque.descrição %>
-                                        </p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                                <%= parque.localização %>
-                                        </li>
-                                        <li class="list-group-item">
-                                                <%= parque.preço %>€/noite
-                                        </li>
-                                        <li class="list-group-item">
-                                                Criado por: <%= parque.autor.username %>
-                                        </li>
-                                </ul>
-
-                                <section class="card-body">
-                                        <% if(utilizadorCorrente && parque.autor.equals(utilizadorCorrente._id)) {%>
-                                                <a href="/parques/<%=parque._id%>/editar"
-                                                        class="btn btn-info card-link">Editar</a>
-                                                <form action="/parques/<%=parque._id%>?_method=DELETE" method="post"
-                                                        class="d-inline">
-                                                        <button class="btn btn-danger my-3">Apagar</button>
-
-                                                </form>
-                                                <% } %>
-                                                        <a href="/parques" class="btn btn-secondary card-link">Lista
-                                                                dos
-                                                                parques</a>
-                                </section>
-                        </section>
-
-
+                        <!-- Para esconder os botões de controlo se o parque tiver apenas 1 imagem -->
+                        <% if (parque.imagens.length > 1) { %>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselParque"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselParque"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                        </button>
+                        <% } %>
                 </div>
-                <section class="col-md-6">
-                        <% if (utilizadorCorrente) { %>
-                                <!-- <h2>Deixe aqui a sua avaliação</h2> -->
-                                <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate
-                                        class="validar">
-                                        <section class="mb-3">
-                                                <!--    <label for="pontuação" class="form-label">Insira a sua pontuação de 1
+                <section class="card p-2 text-center mb-3">
+
+                        <div class="card-body">
+                                <h5 class="card-title mt-2">
+                                        <%= parque.título %>
+                                </h5>
+                                <p class="card-text">
+                                        <%= parque.descrição %>
+                                </p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                        <%= parque.localização %>
+                                </li>
+                                <li class="list-group-item">
+                                        <%= parque.preço %>€/noite
+                                </li>
+                                <li class="list-group-item">
+                                        Criado por: <%= parque.autor.username %>
+                                </li>
+                        </ul>
+
+                        <section class="card-body">
+                                <% if(utilizadorCorrente && parque.autor.equals(utilizadorCorrente._id)) {%>
+                                <a href="/parques/<%=parque._id%>/editar" class="btn btn-info card-link">Editar</a>
+                                <form action="/parques/<%=parque._id%>?_method=DELETE" method="post" class="d-inline">
+                                        <button class="btn btn-danger my-3">Apagar</button>
+
+                                </form>
+                                <% } %>
+                                <a href="/parques" class="btn btn-secondary card-link">Lista
+                                        dos
+                                        parques</a>
+                        </section>
+                </section>
+
+
+        </div>
+        <section class="col-md-6">
+                <% if (utilizadorCorrente) { %>
+                <!-- <h2>Deixe aqui a sua avaliação</h2> -->
+                <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate class="validar">
+                        <section class="mb-3">
+                                <!--    <label for="pontuação" class="form-label">Insira a sua pontuação de 1
                                                         (pior) a 5
                                                         (melhor)</label>
                                                 <input type="range" name="pontuação" id="pontuação" min="1" max="5"
                                                         class="form-control form-range" required> -->
-                                                <fieldset class="starability-basic">
-                                                        <legend>Avaliação:</legend>
-                                                        <input type="radio" id="no-rate" class="input-no-rate"
-                                                                name="pontuação" value="0" checked
-                                                                aria-label="No rating." />
-                                                        <input type="radio" id="first-rate1" name="pontuação"
-                                                                value="1" />
-                                                        <label for="first-rate1" title="Terrible">1 star</label>
-                                                        <input type="radio" id="first-rate2" name="pontuação"
-                                                                value="2" />
-                                                        <label for="first-rate2" title="Not good">2 stars</label>
-                                                        <input type="radio" id="first-rate3" name="pontuação"
-                                                                value="3" />
-                                                        <label for="first-rate3" title="Average">3 stars</label>
-                                                        <input type="radio" id="first-rate4" name="pontuação"
-                                                                value="4" />
-                                                        <label for="first-rate4" title="Very good">4 stars</label>
-                                                        <input type="radio" id="first-rate5" name="pontuação"
-                                                                value="5" />
-                                                        <label for="first-rate5" title="Amazing">5 stars</label>
-                                                </fieldset>
+                                <fieldset class="starability-basic">
+                                        <legend>Avaliação:</legend>
+                                        <input type="radio" id="no-rate" class="input-no-rate" name="pontuação"
+                                                value="0" checked aria-label="No rating." />
+                                        <input type="radio" id="first-rate1" name="pontuação" value="1" />
+                                        <label for="first-rate1" title="Terrible">1 star</label>
+                                        <input type="radio" id="first-rate2" name="pontuação" value="2" />
+                                        <label for="first-rate2" title="Not good">2 stars</label>
+                                        <input type="radio" id="first-rate3" name="pontuação" value="3" />
+                                        <label for="first-rate3" title="Average">3 stars</label>
+                                        <input type="radio" id="first-rate4" name="pontuação" value="4" />
+                                        <label for="first-rate4" title="Very good">4 stars</label>
+                                        <input type="radio" id="first-rate5" name="pontuação" value="5" />
+                                        <label for="first-rate5" title="Amazing">5 stars</label>
+                                </fieldset>
 
-                                        </section>
-                                        <section class="my-3">
-                                                <label for="avaliação" class="form-label">Insira a sua avaliação</label>
-                                                <textarea name="avaliação" id="avaliação" class="form-control"
-                                                        required></textarea>
-                                                <div class="valid-feedback">
-                                                        Perfeito!
-                                                </div>
-                                                <div class="invalid-feedback">
-                                                        Tem que inserir uma avaliação
-                                                </div>
-                                        </section>
-                                        <button class="btn btn-success mb-3">Submeter</button>
-                                </form>
-                                <hr>
-                                <% } %>
-                                        <h2>Avaliações</h2>
-                                        <% for(avaliação of parque.avaliações) { %>
-                                                <section class="card mb-3">
-                                                        <section class=" card-body p-2">
-                                                                <p class="card-text">
-                                                                        <%= avaliação.avaliação %>
-                                                                </p>
-                                                                <!--     <h5 class="card-title">Pontuação: <%=
+                        </section>
+                        <section class="my-3">
+                                <label for="avaliação" class="form-label">Insira a sua avaliação</label>
+                                <textarea name="avaliação" id="avaliação" class="form-control" required></textarea>
+                                <div class="valid-feedback">
+                                        Perfeito!
+                                </div>
+                                <div class="invalid-feedback">
+                                        Tem que inserir uma avaliação
+                                </div>
+                        </section>
+                        <button class="btn btn-success mb-3">Submeter</button>
+                </form>
+                <hr>
+                <% } %>
+                <h2>Avaliações</h2>
+                <% for(avaliação of parque.avaliações) { %>
+                <section class="card mb-3">
+                        <section class=" card-body p-2">
+                                <p class="card-text">
+                                        <%= avaliação.avaliação %>
+                                </p>
+                                <!--     <h5 class="card-title">Pontuação: <%=
                                                                                 avaliação.pontuação %>
                                                                 </h5> -->
-                                                                <!-- <h3>Avaliação</h3> -->
-                                                                <p class="starability-result"
-                                                                        data-rating="<%= avaliação.pontuação %>">
-                                                                        Avaliação: 3 <%= avaliação.pontuação %>
-                                                                </p>
-                                                                <% if (avaliação.autor.username) { %>
-                                                                        <p class="card-subtitle  text-muted">Autor: <%=
+                                <!-- <h3>Avaliação</h3> -->
+                                <p class="starability-result" data-rating="<%= avaliação.pontuação %>">
+                                        Avaliação: 3 <%= avaliação.pontuação %>
+                                </p>
+                                <% if (avaliação.autor.username) { %>
+                                <p class="card-subtitle  text-muted">Autor: <%=
                                                                                         avaliação.autor.username%>
-                                                                        </p>
-                                                                        <% } %>
-                                                        </section>
-                                                        <% if (utilizadorCorrente &&
+                                </p>
+                                <% } %>
+                        </section>
+                        <% if (utilizadorCorrente &&
                                                                 avaliação.autor.equals(utilizadorCorrente._id)) { %>
-                                                                <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE"
-                                                                        method="post" class="p-2">
-                                                                        <button
-                                                                                class="btn btn-danger btn-sm">Apagar</button>
-                                                                </form>
-                                                                <% } %>
-                                                </section>
-                                                <% } %>
+                        <form action="/parques/<%= parque._id %>/avaliacao/<%= avaliação._id %>?_method=DELETE"
+                                method="post" class="p-2">
+                                <button class="btn btn-danger btn-sm">Apagar</button>
+                        </form>
+                        <% } %>
                 </section>
-        </div>
-        </div>
+                <% } %>
+        </section>
+</div>
+</div>
 
-        <script>
-                (() => {
-                        'use strict'
+/* <!-- Aqui temos de colocar a var para o token do mapa, para depois o script em baixo funcionar
+E enviar a var para o ficheiro do script -->
+Também vam,os adicionar uma var para guardar o body do parque, onde estão os dados e tranasformá-los em JSON com stringify*/
+<script>
+        const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+        const parque = <%-JSON.stringify(parque)%>
+</script>
 
-                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                        const forms = document.querySelectorAll('.validar')
+<script src="/js/mostrarMapa.js"></script>
 
-                        // Loop over them and prevent submission
-                        Array.from(forms).forEach(form => {
-                                form.addEventListener('submit', event => {
-                                        if (!form.checkValidity()) {
-                                                event.preventDefault()
-                                                event.stopPropagation()
-                                        }
+<script>
+        (() => {
+                'use strict'
 
-                                        form.classList.add('was-validated')
-                                }, false)
-                        })
-                })()
-        </script>
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.validar')
+
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                        form.addEventListener('submit', event => {
+                                if (!form.checkValidity()) {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                        }, false)
+                })
+        })()
+</script>
+
