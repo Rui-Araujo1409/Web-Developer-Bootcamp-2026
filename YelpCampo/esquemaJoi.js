@@ -5,7 +5,8 @@ const Joi = require("joi");
         localização: Joi.string().required(),
         preço: Joi.number().required().min(10),
        // imagem: Joi.string().required(),
-        descrição: Joi.string().required()
+        descrição: Joi.string().required(),
+        apagarImagem: Joi.array()
     });
 
 module.exports.avaliaçãoEsquema = Joi.object({

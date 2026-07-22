@@ -2,7 +2,7 @@
 <div class="row">
     <h1 class="text-center mb-3">Editar o parque</h1>
     <div class="col-6 offset-3">
-        <form action="/parques/<%= parqueActual._id%>%>?_method=PUT" method="post" novalidate class="validar">
+        <form action="/parques/<%= parqueActual._id%>%>?_method=PUT" method="post" novalidate class="validar mb-3" enctype="multipart/form-data">
             <section class="mb-3">
                 <label for="título" class="form-label">Nome: </label>
                 <input type="text" name="título" class="form-control" id="título" value="<%=parqueActual.título%>" required>
@@ -48,14 +48,23 @@
                     </div>
             </section>
             <section class="mb-3">
-                <label for="imagem" class="form-label">Insira um URL de uma imagem:</label>
-                <input type="text" name="imagem" id="imagem" cols="50" rows="10" class="form-control" required>
+                <label for="imagem" class="form-label">Insira as imagens:</label>
+                <input type="file" name="imagem" id="imagem" class="form-control" multiple>
                  <div class="valid-feedback">
                         Obrigado.
                     </div>
                     <div class="invalid-feedback">
                         É importante inserir uma imagem.
                     </div>
+            </section>
+            <section class="mb-3">
+                <% parqueActual.imagens.forEach((img, ind) => { %>
+                    <img src="<%= img.miniatura %>" class="img-thumbnail" alt="imagem do parque" id="imagem-<%= ind %>">
+                    <div class="form-check-inline">
+                        <label for="imagem-<%= ind %>" class="form-label">Apagar?</label>
+                        <input type="checkbox" name="apagarImagem[]" id="imagem-<%= ind %>" value="<%= img.filename %>">
+                    </div>
+               <% }) %>
             </section>
             <button class="btn btn-primary">Submeter</button>
             <a href="/parques/<%= parqueActual._id%>" class="btn btn-danger">Cancelar</a>

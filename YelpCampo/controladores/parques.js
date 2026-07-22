@@ -1,6 +1,8 @@
 //este é o ficheiro onde vão estar os métodos para as rotas dos parques
 //que de facto são as fxs que estavam no callback das rotas
 const Parque = require("../modelos/parque");
+//o cloudinary para apagar as imagens do cloudinary quando as apagamos do MongoDB
+const {cloudinary} = require("../cloudinary/index");
 
 const índice = async (req, res) => {
     const parques = await Parque.find({});
@@ -39,7 +41,7 @@ const criarParque = async (req, res, next) => {
     //para inserir o path e filename no campo "imagens"
     //vamos buscar os dados ao body do req.files, mas como definimos que vai ser um array no modelo
     //vamos usar o .map para percorrer o array e extrair esses campo para um obj
-    novoParque.imagens = req.files.map(item => ({url: item.path, filename: item.filename})) 
+    novoParque.imagens = req.files.map(item => ({ url: item.path, filename: item.filename }))
     //linha para buscar o id do autor do campo
     novoParque.autor = req.user._id;
     await novoParque.save();
@@ -53,9 +55,9 @@ const detalheParque = async (req, res, next) => {
     const { sucesso, error } = req.flash;
     const parque = await Parque.findById(id).populate({
         path: "avaliações", //aqui é mais complicado, estamos a popular no parque o campo "avaliações",
-        populate:{          //agora queremos dentro das "avaliações" popular o campo "autor"
+        populate: {          //agora queremos dentro das "avaliações" popular o campo "autor"
             path: "autor"   //e no populate seguinte é para o campo autor mas do parque
-        } 
+        }
     }).populate("autor"); //para popular propriedades basta encadear o populate
     //if (!parque) { next(new AppErros("Parque não existe", 404)); };
     //o mesmo mas com Flash
@@ -87,6 +89,22 @@ const gravarEditarParque = async (req, res) => {
             return res.redirect(`/parques/${id}`);
         } */
     const parqueEditado = await Parque.findByIdAndUpdate(id, req.body, { runValidators: true, returnDocument: 'after' });
+    const imgs = req.files.map(item => ({ url: item.path, filename: item.filename }));
+    //o operador spread vai inserir os items do array criado com o map
+    //se inserisse apenas no push o imgs ele iria criar um array dentro de um array
+    parqueEditado.imagens.push(...imgs);
+    await parqueEditado.save();
+    //lógica para apagar imagens seleccionadas (propriedade apagarImagem[])
+    //mas apenas se esse array não estiver vazio (o array está no req.body)
+    if (req.body.apagarImagem) {
+        //para apagar do cloudinary chamar o método destroy em uploader e o parâmetro é o filename
+        //que é retirado do loop que passa pelo array req.body.apagarImagem
+        for (let filename of req.body.apagarImagem) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        //$pull retira elemento de um array (imagens) cujo filename esteja presente ($in) no req.body.apagarImagem
+        await parqueEditado.updateOne({ $pull: { imagens: { filename: { $in: req.body.apagarImagem } } } });
+    }
     req.flash("sucesso", "Campo actualizado com sucesso!");
     res.redirect(`/parques/${parqueEditado._id}`);
 }

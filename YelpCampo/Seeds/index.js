@@ -26,7 +26,16 @@ const seedBD = async () => {
                 autor: '6a5e28a351db71c79cb4d358',
                 localização: `${cidades[aleatório].city}, ${cidades[aleatório].state}`,
                 título: `${amostra(descriptores)} ${amostra(sítios)}`,
-                imagem: `https://picsum.photos/400?random=${Math.random()}`,
+                imagens: [
+                    {
+                        url: "https://res.cloudinary.com/jn84c9nh/image/upload/v1784724778/553-400x400_mqjbwh.jpg",
+                        filename: "YelpCampo/553-400x400_mqjbwh"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/jn84c9nh/image/upload/v1784725028/kristaps-ungurs-i7YqXV2m7BQ-unsplash_kbigwm.jpg",
+                        filename: "YelpCampo/kristaps-ungurs-i7YqXV2m7BQ-unsplash_kbigwm"
+                    }
+                ],
                 descrição: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.",
                 preço
             })

@@ -32,7 +32,7 @@ rota.get("/novo", estáLogado, parques.novoFormCriarParque);
 //rotas dinâmicas
 rota.route("/:id")
 .get(parques.detalheParque)
-.put(estáLogado, validarParque, verificarAutor, parques.gravarEditarParque)
+.put(estáLogado, verificarAutor, upload.array("imagem"), decodeMulterBody, validarParque, parques.gravarEditarParque)
 .delete(estáLogado, verificarAutor, parques.apagarParque);
 
 rota.get("/:id/editar", estáLogado, verificarAutor, parques.formEditarParque);

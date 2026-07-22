@@ -8,23 +8,26 @@
                         <div id="carouselExample" class="carousel slide">
                                 <div class="carousel-inner">
                                         <!-- O forEach é para dar à primeira imagem do array a classe de "active" -->
-                                        <% parque.imagens.forEach((img, index) => {%>
-                                                <div class="carousel-item <%= index === 0 ? "active" : "" %>">
+                                        <% parque.imagens.forEach((img, index)=> {%>
+                                                <div class="carousel-item <%= index === 0 ? " active" : "" %>">
                                                         <img src="<%=img.url%>" class="d-block w-100"
                                                                 alt="imagem do parque">
                                                 </div>
                                                 <% }) %>
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                                        data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                                        data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                </button>
+                                <!-- Para esconder os botões de controlo se o parque tiver apenas 1 imagem -->
+                                <% if (parque.imagens.length > 1) { %>
+                                        <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselExample" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                                data-bs-target="#carouselExample" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                        </button>
+                                        <% } %>
                         </div>
                         <section class="card p-2 text-center mb-3">
 
