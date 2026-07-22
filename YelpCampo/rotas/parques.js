@@ -13,6 +13,8 @@ const {storage} = require("../cloudinary/index.js")
 const upload = multer({storage})     //a versão de teste era com armazenamento local ({ dest: 'uploads/' });
 //importar os controladores
 const parques = require("../controladores/parques.js");
+//importar o middleware que vai converter os caracteres do multer
+const {decodeMulterBody} = require("../middleware.js");
 
 
 //as rotas estáticas têm de ser colocadas antes das dinâmicas
@@ -22,10 +24,7 @@ const parques = require("../controladores/parques.js");
 
 rota.route("/")
 .get(parques.índice)
-//.post(estáLogado, validarParque, parques.criarParque);
-.post(upload.single("imagem"), (req,res) => {
-    console.log(req.body, req.file);
-})
+.post(estáLogado, upload.array("imagem"), decodeMulterBody, validarParque, parques.criarParque);
 
 rota.get("/novo", estáLogado, parques.novoFormCriarParque);
 

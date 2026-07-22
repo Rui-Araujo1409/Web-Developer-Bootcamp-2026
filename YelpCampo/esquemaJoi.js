@@ -4,7 +4,7 @@ const Joi = require("joi");
         título: Joi.string().required(),
         localização: Joi.string().required(),
         preço: Joi.number().required().min(10),
-        imagem: Joi.string().required(),
+       // imagem: Joi.string().required(),
         descrição: Joi.string().required()
     });
 

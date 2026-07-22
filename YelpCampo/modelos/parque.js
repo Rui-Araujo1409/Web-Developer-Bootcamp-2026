@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 
 const ParqueSchema = new Schema({
     título: String,
-    imagem: String,
+    imagens: [
+        {url: String,
+        filename: String
+        }
+    ],
     preço: {
         type: Number,
         min: 1
@@ -23,7 +27,7 @@ const ParqueSchema = new Schema({
     }]
 });
 
-//middleware para apagar todas as avaliações do campo apagado
+//middleware post (não tem nada a haver com o pedido HTTP) para apagar todas as avaliações do campo apagado
 ParqueSchema.post("findOneAndDelete", async function(doc) { //o doc é o obj do campo
     if(doc) { //para o caso de não haver campo,não se apaga nada
         //o remove() foi descontinuado no Mongoose, aqui o que estamos a dizer é:

@@ -27,6 +27,7 @@ const guardarUrlOriginal = (req, res, next) => {
 
 //fx para a validação, aqui tem de se acrescentar o next() para o fluxo continuar
 const validarParque = (req, res, next) => {
+    console.log(req.body, req.files);
     {
         //depois passamos o esquema para o seu próprio ficheiro
         /*   const parqueEsquema = Joi.object({
@@ -84,11 +85,40 @@ const validarAvaliação = (req,res,next) => {
 }
 
 
+// Helper to fix encoding recursively (handles strings, arrays, and nested objects)
+const fixUtf8 = (data) => {
+  if (typeof data === 'string') {
+    return Buffer.from(data, 'latin1').toString('utf8');
+  }
+  if (Array.isArray(data)) {
+    return data.map(fixUtf8);
+  }
+  if (data !== null && typeof data === 'object') {
+    const fixedObj = {};
+    for (const [key, value] of Object.entries(data)) {
+      const fixedKey = Buffer.from(key, 'latin1').toString('utf8');
+      fixedObj[fixedKey] = fixUtf8(value);
+    }
+    return fixedObj;
+  }
+  return data;
+}
+
+// Express Middleware 
+const decodeMulterBody = (req, res, next) => {
+  if (req.body) {
+    req.body = fixUtf8(req.body);
+  }
+  next();
+};
+
+
 module.exports = {
     estáLogado,
     guardarUrlOriginal,
     validarParque,
     verificarAutor,
     verificarAutorAvaliação,
-    validarAvaliação
+    validarAvaliação,
+    decodeMulterBody
 };

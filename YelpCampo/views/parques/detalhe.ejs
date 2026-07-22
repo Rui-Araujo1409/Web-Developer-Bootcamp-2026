@@ -5,8 +5,29 @@
 
         <div class="row justify-content-center">
                 <div class="col-md-6">
+                        <div id="carouselExample" class="carousel slide">
+                                <div class="carousel-inner">
+                                        <!-- O forEach é para dar à primeira imagem do array a classe de "active" -->
+                                        <% parque.imagens.forEach((img, index) => {%>
+                                                <div class="carousel-item <%= index === 0 ? "active" : "" %>">
+                                                        <img src="<%=img.url%>" class="d-block w-100"
+                                                                alt="imagem do parque">
+                                                </div>
+                                                <% }) %>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                        data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                        data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                </button>
+                        </div>
                         <section class="card p-2 text-center mb-3">
-                                <img src="<%=parque.imagem%>" alt="imagem do parque" class="img-fluid card-img-top">
+
                                 <div class="card-body">
                                         <h5 class="card-title mt-2">
                                                 <%= parque.título %>
@@ -37,7 +58,8 @@
 
                                                 </form>
                                                 <% } %>
-                                                        <a href="/parques" class="btn btn-secondary card-link">Lista dos
+                                                        <a href="/parques" class="btn btn-secondary card-link">Lista
+                                                                dos
                                                                 parques</a>
                                 </section>
                         </section>
@@ -50,7 +72,7 @@
                                 <form action="/parques/<%= parque._id %>/avaliacao" method="post" novalidate
                                         class="validar">
                                         <section class="mb-3">
-                                             <!--    <label for="pontuação" class="form-label">Insira a sua pontuação de 1
+                                                <!--    <label for="pontuação" class="form-label">Insira a sua pontuação de 1
                                                         (pior) a 5
                                                         (melhor)</label>
                                                 <input type="range" name="pontuação" id="pontuação" min="1" max="5"
@@ -60,15 +82,20 @@
                                                         <input type="radio" id="no-rate" class="input-no-rate"
                                                                 name="pontuação" value="0" checked
                                                                 aria-label="No rating." />
-                                                        <input type="radio" id="first-rate1" name="pontuação" value="1" />
+                                                        <input type="radio" id="first-rate1" name="pontuação"
+                                                                value="1" />
                                                         <label for="first-rate1" title="Terrible">1 star</label>
-                                                        <input type="radio" id="first-rate2" name="pontuação" value="2" />
+                                                        <input type="radio" id="first-rate2" name="pontuação"
+                                                                value="2" />
                                                         <label for="first-rate2" title="Not good">2 stars</label>
-                                                        <input type="radio" id="first-rate3" name="pontuação" value="3" />
+                                                        <input type="radio" id="first-rate3" name="pontuação"
+                                                                value="3" />
                                                         <label for="first-rate3" title="Average">3 stars</label>
-                                                        <input type="radio" id="first-rate4" name="pontuação" value="4" />
+                                                        <input type="radio" id="first-rate4" name="pontuação"
+                                                                value="4" />
                                                         <label for="first-rate4" title="Very good">4 stars</label>
-                                                        <input type="radio" id="first-rate5" name="pontuação" value="5" />
+                                                        <input type="radio" id="first-rate5" name="pontuação"
+                                                                value="5" />
                                                         <label for="first-rate5" title="Amazing">5 stars</label>
                                                 </fieldset>
 

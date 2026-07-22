@@ -36,6 +36,10 @@ const criarParque = async (req, res, next) => {
      }  */
 
     const novoParque = new Parque(req.body);
+    //para inserir o path e filename no campo "imagens"
+    //vamos buscar os dados ao body do req.files, mas como definimos que vai ser um array no modelo
+    //vamos usar o .map para percorrer o array e extrair esses campo para um obj
+    novoParque.imagens = req.files.map(item => ({url: item.path, filename: item.filename})) 
     //linha para buscar o id do autor do campo
     novoParque.autor = req.user._id;
     await novoParque.save();
