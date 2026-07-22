@@ -35,6 +35,7 @@ const ParqueSchema = new Schema({
             required: true
         }
     },
+    localização: String,
     //esta propriedade é para apresentar quem criou o parque
     autor: {
         type: Schema.Types.ObjectId,
