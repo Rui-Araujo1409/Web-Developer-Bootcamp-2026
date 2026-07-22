@@ -2,7 +2,11 @@
 //que de facto são as fxs que estavam no callback das rotas
 const Parque = require("../modelos/parque");
 //o cloudinary para apagar as imagens do cloudinary quando as apagamos do MongoDB
-const {cloudinary} = require("../cloudinary/index");
+const { cloudinary } = require("../cloudinary/index");
+//importar o mapbox e o token
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 const índice = async (req, res) => {
     const parques = await Parque.find({});
@@ -19,6 +23,11 @@ const novoFormCriarParque = (req, res) => {
 }
 
 const criarParque = async (req, res, next) => {
+    //o geocode
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.localização,
+        limit: 1
+    }).send();
     //construir o esquema com o Joi
     //para o primeiro exemplo construi-se o esquema dentro da routa
     //mas como se quer reutilizar o melhor é criar uma fx (ver mais acima)
@@ -38,6 +47,8 @@ const criarParque = async (req, res, next) => {
      }  */
 
     const novoParque = new Parque(req.body);
+    //inserir os dados do GeoJSON
+    novoParque.geometry = geoData.body.features[0].geometry;
     //para inserir o path e filename no campo "imagens"
     //vamos buscar os dados ao body do req.files, mas como definimos que vai ser um array no modelo
     //vamos usar o .map para percorrer o array e extrair esses campo para um obj
@@ -45,6 +56,7 @@ const criarParque = async (req, res, next) => {
     //linha para buscar o id do autor do campo
     novoParque.autor = req.user._id;
     await novoParque.save();
+    console.log(novoParque);
     req.flash("sucesso", "Campo criado com sucesso!");
     req.flash("error", "Parece que houve um erro...");
     res.redirect(`/parques/${novoParque._id}`);

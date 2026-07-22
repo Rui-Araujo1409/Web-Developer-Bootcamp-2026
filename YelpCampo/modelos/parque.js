@@ -9,10 +9,10 @@ const ImagemSchema = new Schema({
 })
 
 //depois criar um virtual para este esquema
-ImagemSchema.virtual("miniatura").get(function() {
+ImagemSchema.virtual("miniatura").get(function () {
     //vamos substituir o "/upload" na url do cloudinary por "/upload/w_300"
     //depois no template é colocar imagem.miniatura em vez de imagem.url
-   return this.url.replace("/upload", "/upload/w_200");
+    return this.url.replace("/upload", "/upload/w_200");
 });
 
 const ParqueSchema = new Schema({
@@ -23,7 +23,18 @@ const ParqueSchema = new Schema({
         min: 1
     },
     descrição: String,
-    localização: String,
+    //esta propriedade segue o standard do GeoJSON
+    geometry: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     //esta propriedade é para apresentar quem criou o parque
     autor: {
         type: Schema.Types.ObjectId,
