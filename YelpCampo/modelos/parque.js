@@ -15,6 +15,9 @@ ImagemSchema.virtual("miniatura").get(function () {
     return this.url.replace("/upload", "/upload/w_200");
 });
 
+//este código é para que o virtuals seja incluído quando se cria o JSON
+const opts = {toJSON: {vrituals: true}};
+
 const ParqueSchema = new Schema({
     título: String,
     imagens: [ImagemSchema],
@@ -46,7 +49,14 @@ const ParqueSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Avaliação"
     }]
-});
+}, opts);
+
+
+
+//o virtual para o popup do Cluster
+ParqueSchema.virtual("properties.popUpMarkup").get(function () {
+    return "Este é o texto do popup!";
+})
 
 //middleware post (não tem nada a haver com o pedido HTTP) para apagar todas as avaliações do campo apagado
 ParqueSchema.post("findOneAndDelete", async function (doc) { //o doc é o obj do campo

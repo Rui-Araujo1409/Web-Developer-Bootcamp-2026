@@ -1,4 +1,7 @@
 <% layout("layouts/boilerplate") %>
+
+<div id="map" style="width: 100%; height: 500px;"></div>
+
 <h1>Todos os Parques</h1>
 
 <%for(let parque of parques) {%>
@@ -18,3 +21,10 @@
     </div>
 </div>
 <%}%>
+
+
+<script>
+        const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+        const parques = {features: <%-JSON.stringify(parques)%>}; //temos de inserir o nosso conjunto de dados numa propriedade "features"
+</script>
+<script src="/js/cluster.js"></script>
