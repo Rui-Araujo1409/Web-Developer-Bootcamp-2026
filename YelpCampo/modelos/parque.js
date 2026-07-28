@@ -16,7 +16,7 @@ ImagemSchema.virtual("miniatura").get(function () {
 });
 
 //este código é para que o virtuals seja incluído quando se cria o JSON
-const opts = {toJSON: {vrituals: true}};
+const opts = {toJSON: {virtuals: true}};
 
 const ParqueSchema = new Schema({
     título: String,
@@ -55,7 +55,13 @@ const ParqueSchema = new Schema({
 
 //o virtual para o popup do Cluster
 ParqueSchema.virtual("properties.popUpMarkup").get(function () {
-    return "Este é o texto do popup!";
+  //  return "Este é o texto do popup!"; 
+  //o this refere-se ao objecto parque
+  return `
+  <a href="/parques/${this._id}">${this.título}</a> 
+  <span>, ${this.preço}€/noite</span>
+  <p>${this.localização}</p>
+  ` 
 })
 
 //middleware post (não tem nada a haver com o pedido HTTP) para apagar todas as avaliações do campo apagado
