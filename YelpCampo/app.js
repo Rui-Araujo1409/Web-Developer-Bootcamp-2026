@@ -4,6 +4,7 @@ if(process.env.NODE_ENV !== "production") {
 }
 const express = require("express");
 const app = express();
+app.set('query parser', 'extended');
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -19,6 +20,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const passportLocal = require("passport-local");
 const Utilizador = require("./modelos/utilizador.js");
+const sanitizeV5 = require('./utils/mongoSanitizeV5.js');
 
 
 
@@ -60,6 +62,7 @@ app.set("view engine", "ejs");
 app.use(flash());
 morgan("tiny");
 app.use(express.static(path.join(__dirname, "public"))); //middleware para servir os items estáticos
+app.use(sanitizeV5({ replaceWith: '_' }));
 
 ///Sessão
 const sessãoConfig = {
@@ -91,6 +94,7 @@ passport.deserializeUser(Utilizador.deserializeUser()); //para retirar um user d
 ///Flash
 //middleware do Flash e Passport
 app.use((req,res,next) => {
+   //console.log(req.query);
     res.locals.utilizadorCorrente = req.user;
     res.locals.sucesso = req.flash("sucesso");
     res.locals.error = req.flash("error"); //aqui tem de ser "error" por causa do flashFailure do passport.authenticate, com "erro" a mensagem não aparece
