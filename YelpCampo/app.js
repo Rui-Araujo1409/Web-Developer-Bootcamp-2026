@@ -64,9 +64,52 @@ app.use(flash());
 morgan("tiny");
 app.use(express.static(path.join(__dirname, "public"))); //middleware para servir os items estáticos
 app.use(sanitizeV5({ replaceWith: '_' }));
-app.use(helmet({
-    contentSecurityPolicy: false //só no início para carregar imagens
-}));
+app.use(helmet());
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js.map",
+    "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js.map",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net"
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css.map",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net"
+];
+const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/"
+];
+//middleware do helmetCSP
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: [],
+        connectSrc: ["'self'", ...connectSrcUrls],
+        scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+        styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+        workerSrc: ["'self'", "blob:"],
+        objectSrc: [],
+        imgSrc: [
+            "'self'",
+            "blob:",
+            "data:",
+            "https://res.cloudinary.com/jn84c9nh/"
+        ],
+        fontSrc: ["'self'"],
+    }
+}))
 
 ///Sessão
 const sessãoConfig = {
