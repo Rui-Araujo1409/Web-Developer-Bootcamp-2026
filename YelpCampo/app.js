@@ -21,6 +21,7 @@ const passport = require("passport");
 const passportLocal = require("passport-local");
 const Utilizador = require("./modelos/utilizador.js");
 const sanitizeV5 = require('./utils/mongoSanitizeV5.js');
+const helmet = require("helmet");
 
 
 
@@ -63,14 +64,19 @@ app.use(flash());
 morgan("tiny");
 app.use(express.static(path.join(__dirname, "public"))); //middleware para servir os items estáticos
 app.use(sanitizeV5({ replaceWith: '_' }));
+app.use(helmet({
+    contentSecurityPolicy: false //só no início para carregar imagens
+}));
 
 ///Sessão
 const sessãoConfig = {
+    //name: "session", //para evitar usar o connect.id
     secret: "nikita",
     resave: false,
     saveUninitialized: true,
     cookie: {
-        httpOnly: true,
+        httpOnly: true, //protege o acesso aos cookies por JS
+        //secure: true, //para ligações em https obrigatório em prod
         expires: Date.now() + 1000 * 60 * 60* 24 * 7,
         maxAge: 1000 * 60 * 60* 24 * 7,
     }
