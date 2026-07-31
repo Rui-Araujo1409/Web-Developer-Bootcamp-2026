@@ -27,15 +27,19 @@
 
 //ainda outra forma de escrever o resultado anterior é colocar um &&/AND e a expressão que ser quer mostrar
 //sem o operador ternário, o h3 só é mostrado se a condição se cumprir
-export default function DuploDados () {
+export default function DuploDados() {
     const num1 = Math.floor(Math.random() * 3) + 1;
     const num2 = Math.floor(Math.random() * 3) + 1;
+    //também podemos colocar a lógica numa var, para o caso de a reutilizarmos
+    const seGanhou = num1 === num2;
+    //agora podemos definir estilos dinamicamente inline com o atributo styles, usando um obj 
+    const estilos = { color: seGanhou ? "green" : "red" };
     return (
-        <>
-        <h1>Duplo Dados!</h1>
-        {num1 === num2 && <h3>Ganhou! XD</h3>}
-        <p>Número 1: {num1}</p>
-        <p>Número 2: {num2}</p>   
-        </>
+        <div className="DuploDados" style={estilos}>
+            <h1>Duplo Dados!</h1>
+            {seGanhou && <h3 >Ganhou! XD</h3>}
+            <p>Número 1: {num1}</p>
+            <p>Número 2: {num2}</p>
+        </div>
     )
 }
