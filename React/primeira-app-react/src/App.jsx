@@ -1,6 +1,7 @@
 import './App.css'
 import Cumprimentar from './Cumprimentar'
 import Dados from './Dados'
+import ListaEscolha from './ListaEscolha'
 
 function App() {
   //para usar vários parâmetros no Props, separam com um espaço (em vez de ,)
@@ -10,9 +11,10 @@ function App() {
       {/* <Cumprimentar pessoa="Rui" local="Massamá" /> 
       <Cumprimentar pessoa="Ana" local="Bârlad"/>
       <Cumprimentar pessoa="Ioachim" local="Bârlad" /> */}
-      <Dados />
+    {/*   <Dados />
       <Dados lados={10}/>
-      <Dados lados={20}/>
+      <Dados lados={20}/> */}
+      {/* <ListaEscolha valores={[1,2,3]}/> */}
     </div>
   )
 }
