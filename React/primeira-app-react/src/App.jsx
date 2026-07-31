@@ -10,7 +10,7 @@ function App() {
       {/* <Cumprimentar pessoa="Rui" local="Massamá" /> 
       <Cumprimentar pessoa="Ana" local="Bârlad"/>
       <Cumprimentar pessoa="Ioachim" local="Bârlad" /> */}
-      <Dados lados={6}/>
+      <Dados />
       <Dados lados={10}/>
       <Dados lados={20}/>
     </div>
