@@ -4,7 +4,7 @@ export default function ({cores}) {
     //ou mesmo inserir o loop do .map no return
     return (
         <div>
-            <p>Está é a lista de cores:</p>
+            <p>Esta é a lista de cores:</p>
             <ul>{cores.map(cor => <li style={{color: cor}}>{cor}</li>)}</ul>
         </div>
     )
