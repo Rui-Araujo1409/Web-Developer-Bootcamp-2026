@@ -11,6 +11,7 @@ import ListaPropriedades from './ListaPropriedades'
 import Clicar from "./Clicar"
 import Formulário from './Formulário'
 import Clicar2 from './Clicar2'
+import Contador from './Contador'
 
 //vou colcoar ids por causa da propriedade key do React
 const dados = [
@@ -54,8 +55,9 @@ function App() {
       {/* <ListaPropriedades propriedades = {propriedades}/> */}
       {/* <Clicar/> */}
       {/* <Formulário/> */}
-      <Clicar2 mensagem="Boas" textoBotão="Clicar aqui"/>
-      <Clicar2 mensagem="Não clicar sff" textoBotão="Por favor, não clique aqui"/>
+      {/* <Clicar2 mensagem="Boas" textoBotão="Clicar aqui"/>
+      <Clicar2 mensagem="Não clicar sff" textoBotão="Por favor, não clique aqui"/> */}
+      <Contador/>
     </div>
   )
 }
