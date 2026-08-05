@@ -8,6 +8,9 @@ import ListaCores from './ListaCores'
 import Slot from './Slot'
 import ListaCompras from "./ListaCompras"
 import ListaPropriedades from './ListaPropriedades'
+import Clicar from "./Clicar"
+import Formulário from './Formulário'
+import Clicar2 from './Clicar2'
 
 //vou colcoar ids por causa da propriedade key do React
 const dados = [
@@ -48,7 +51,11 @@ function App() {
    {/*    <Slot valor1="X" valor2="X" valor3="X"/>
       <Slot valor1="X" valor2="X" valor3="O"/> */}
       {/* <ListaCompras item={dados}/> */}
-      <ListaPropriedades propriedades = {propriedades}/>
+      {/* <ListaPropriedades propriedades = {propriedades}/> */}
+      {/* <Clicar/> */}
+      {/* <Formulário/> */}
+      <Clicar2 mensagem="Boas" textoBotão="Clicar aqui"/>
+      <Clicar2 mensagem="Não clicar sff" textoBotão="Por favor, não clique aqui"/>
     </div>
   )
 }
