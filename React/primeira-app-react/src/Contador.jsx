@@ -11,7 +11,9 @@ function Contador() {
     //a norma é desestruturar o array retornado pelo hook
     //Nota: o hook tem 
     const [num, setNum] = useState(0);
+    console.log(`O componente foi refeito, o contador é ${num}`);
     const mudarNum = () => setNum(num + 1);
+    console.log(`O botão foi clicado, o contador é ${num}`);
     return (
         <div>
             <p>O contador é: {num} </p>

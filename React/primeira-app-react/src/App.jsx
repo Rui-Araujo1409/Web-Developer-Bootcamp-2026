@@ -13,6 +13,9 @@ import Formulário from './Formulário'
 import Clicar2 from './Clicar2'
 import Contador from './Contador'
 import Interruptor from './Interruptor'
+import InterruptorContador from './InterruptorContador'
+import CaixaCor from './CaixaCor'
+import CaixasCor from './CaixasCor'
 
 //vou colcoar ids por causa da propriedade key do React
 const dados = [
@@ -59,7 +62,9 @@ function App() {
       {/* <Clicar2 mensagem="Boas" textoBotão="Clicar aqui"/>
       <Clicar2 mensagem="Não clicar sff" textoBotão="Por favor, não clique aqui"/> */}
       {/* <Contador/> */}
-      <Interruptor/>
+      {/* <Interruptor/> */}
+      {/* <InterruptorContador/> */}
+      <CaixasCor/>
     </div>
   )
 }
