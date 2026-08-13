@@ -16,7 +16,7 @@ const alterarTodosProdutos = () => definirProduto(prev => prev.map(el => ({...el
     return (
         <div>
             <ul>{produto.map(el => <li key={el.id} onClick={()=> apagarProduto(el.id)}>Produto: {el.produto}, preço: {el.preço}</li>)}</ul>
-            <button onClick={alterarTodosProdutos}>Mudar nome produto</button>
+            <button onClick={alterarTodosProdutos}>Mudar nome produtos</button>
         </div>
     )
 } 
