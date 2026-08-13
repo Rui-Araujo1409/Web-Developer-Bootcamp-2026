@@ -4,6 +4,14 @@ import Contador from './Contador'
 import Teste from './Teste'
 import Jogo from './Jogo'
 import Emojis from './Emojis'
+import Métodos from './Métodos.jsx'
+import {v4 as uuid} from "uuid";
+
+const carrinho = [
+        { id: uuid(), produto: "Cabo HDMI", preço: 12 },
+        { id: uuid(), produto: "Pen USB", preço: 30 },
+        { id: uuid(), produto: "Rato", preço: 40 }
+    ]
 
 function App() {
 
@@ -12,7 +20,8 @@ function App() {
      {/* <Contador/> */}
      {/* <Teste/> */}
      {/* <Jogo/> */}
-     <Emojis/>
+     {/* <Emojis/> */}
+     <Métodos carrinho = {carrinho} />
     </>
   )
 }
