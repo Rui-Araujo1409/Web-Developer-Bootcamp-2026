@@ -7,7 +7,6 @@ export default function Métodos({carrinho}) {
 const [produto, definirProduto] = useState(carrinho);
 //para apagar um produto
 const apagarProduto = (id) => {
-    console.log(id)
     definirProduto((prev) => prev.filter(el => el.id !== id))
 }
 //para mudar o nome de todos os produtos
