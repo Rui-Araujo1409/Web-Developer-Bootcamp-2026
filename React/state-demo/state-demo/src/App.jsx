@@ -3,6 +3,7 @@ import './App.css'
 import Contador from './Contador'
 import Teste from './Teste'
 import Jogo from './Jogo'
+import Emojis from './Emojis'
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
     <>
      {/* <Contador/> */}
      {/* <Teste/> */}
-     <Jogo/>
+     {/* <Jogo/> */}
+     <Emojis/>
     </>
   )
 }
