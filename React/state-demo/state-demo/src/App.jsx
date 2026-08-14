@@ -6,6 +6,7 @@ import Jogo from './Jogo'
 import Emojis from './Emojis'
 import Métodos from './Métodos.jsx'
 import {v4 as uuid} from "uuid";
+import Exercício from './Exercício.jsx'
 
 const carrinho = [
         { id: uuid(), produto: "Cabo HDMI", preço: 12 },
@@ -21,7 +22,8 @@ function App() {
      {/* <Teste/> */}
      {/* <Jogo/> */}
      {/* <Emojis/> */}
-     <Métodos carrinho = {carrinho} />
+     {/* <Métodos carrinho = {carrinho} /> */}
+     <Exercício jogadores={4} limite={5}/>
     </>
   )
 }

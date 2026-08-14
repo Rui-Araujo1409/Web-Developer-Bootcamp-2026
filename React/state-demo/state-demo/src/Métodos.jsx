@@ -20,3 +20,12 @@ const alterarTodosProdutos = () => definirProduto(prev => prev.map(el => ({...el
         </div>
     )
 } 
+
+//método para alterar um elemento específico de um array/array-objs
+/* prev.map(el => {
+    if(el.id === id) {
+        return {...prev, propriedade: "XXX"};
+    } else {
+        return el;
+    }
+}) */

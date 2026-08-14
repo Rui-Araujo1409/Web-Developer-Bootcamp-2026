@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 
 export default function Emojis() {
     const [emojis, definirEmojis] = useState([{ id: uuid(), emoji: ":)" }]);
-    const mudarEmojis = () => {
+    const adicionarEmojis = () => {
         //antes de usar o uuid
         //definirEmojis((emojiAnterior) => [...emojiAnterior, "XD"]);
         //depois de usar o uuid tem que se colocar o obj
@@ -13,6 +13,10 @@ export default function Emojis() {
         //vamos definir o novo estado dos emojis com o .filter
         //nota: vou usar o prev como modelo para o estado anterior
         definirEmojis((prev) => prev.filter(el => el.id !== id));
+    }
+
+    const mudarTodosEmojis = () => {
+        definirEmojis(prev => prev.map(el => ({...el, emoji:"(Y)"})))
     }
     return (
         <div>
@@ -26,7 +30,8 @@ export default function Emojis() {
                     style={{ fontSize: "4rem" }}>
                     {el.emoji}
                 </p>))}
-            <button onClick={mudarEmojis}>Mudar Emoji</button>
+            <button onClick={adicionarEmojis}>Mudar Emoji</button>
+            <button onClick={mudarTodosEmojis}>Mudar todos emojis</button>
         </div>
     )
 }
